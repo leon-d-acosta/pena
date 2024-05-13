@@ -1,7 +1,6 @@
 import 'package:PenaAventura/cor.dart';
 import 'package:PenaAventura/views/perfil.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 class Qr_Scanner extends StatefulWidget {
@@ -15,6 +14,7 @@ class _Qr_ScannerState extends State<Qr_Scanner> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
+      bottom: false,
       child: Scaffold(
         body: Column(
           children: [
