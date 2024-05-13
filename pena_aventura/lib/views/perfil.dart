@@ -123,7 +123,7 @@ class _PerfilState extends State<Perfil> {
                                     snap[0][field],
                                     style: const TextStyle(color: Colors.white),
                                   ),
-                                  trailing: field !='email'? Icon(Icons.arrow_forward_ios, color: Colors.white,): Icon(Icons.alternate_email, color: Colors.white,)
+                                  trailing: field !='email'? const Icon(Icons.arrow_forward_ios, color: Colors.white,): const Icon(Icons.alternate_email, color: Colors.white,)
                                 ),
                               ),
                             );

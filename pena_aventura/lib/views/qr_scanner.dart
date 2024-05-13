@@ -26,13 +26,13 @@ class _Qr_ScannerState extends State<Qr_Scanner> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Pesquisar por", style: TextStyle(color: Colors.black, fontSize: 20),),
-                  Text("ID", style: TextStyle(color: Cor.verde_1, fontSize: 30, fontWeight: FontWeight.bold),),
+                  const Text("Pesquisar por", style: TextStyle(color: Colors.black, fontSize: 20),),
+                  const Text("ID", style: TextStyle(color: Cor.verde_1, fontSize: 30, fontWeight: FontWeight.bold),),
                   Container(
                     padding: const EdgeInsets.only(left: 10),
-                    child: TextField(),
+                    child: const TextField(),
                   ),
-                  SizedBox(height: 10,),
+                  const SizedBox(height: 10,),
                   GestureDetector(
                     child: Container(
                       width: MediaQuery.of(context).size.width,
@@ -65,7 +65,7 @@ class _Qr_ScannerState extends State<Qr_Scanner> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => Perfil(),
+                      builder: (context) => const Perfil(),
                     ),
                   );
                 }
