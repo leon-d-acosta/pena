@@ -1,7 +1,7 @@
+import 'package:PenaAventura/views/postos/qr_tarefa/search_tarefa/search_tarefa.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:PenaAventura/views/cores/cor.dart';
-import 'package:PenaAventura/views/perfil/perfil.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 final TextEditingController idController = TextEditingController();
@@ -72,7 +72,7 @@ class _Qr_ScannerState extends State<Qr_Scanner> {
               color: c.cinza,
               child: MobileScanner(
                 controller: MobileScannerController(
-                  detectionSpeed: DetectionSpeed.noDuplicates,
+                  detectionSpeed: DetectionSpeed.normal,
                 ),
                 onDetect: (capture) {
                   final List<Barcode> barcodes = capture.barcodes;
@@ -83,7 +83,7 @@ class _Qr_ScannerState extends State<Qr_Scanner> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const Perfil(),
+                        builder: (context) => SearchTarefa(),
                       ),
                     );
                   }
