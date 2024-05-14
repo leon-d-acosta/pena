@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:PenaAventura/cor.dart';
+import 'package:PenaAventura/views/cores/cor.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -46,7 +46,7 @@ Future<List<dynamic>> _getData() async {
       child: Scaffold(
         backgroundColor: Cor.cinza,
         body: Padding(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(40),
           child: FutureBuilder(
             future: _futureData,
             builder: (BuildContext context, AsyncSnapshot snapshot){
@@ -59,22 +59,27 @@ Future<List<dynamic>> _getData() async {
               List<dynamic> snap = snapshot.data!;
               return GridView.builder(
                 itemCount: snap.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 16,
-                  crossAxisSpacing: 8
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: MediaQuery.of(context).orientation == Orientation.portrait ? 2 : 4,
+                  mainAxisSpacing: 15,
+                  crossAxisSpacing: 15
                 ), 
                 itemBuilder: (context, index) {
-                  return Container(
-                    height: MediaQuery.of(context).size.height,
-                    width: MediaQuery.of(context).size.width,
-                    color: Cor.verde_1,
-                    child: Center(
-                      child: Text(snap[index]['tarefa_nome']),
+                  return GestureDetector(
+                    onTap: () => print("a ${snap[index]['tarefa_nome']}"),
+                    child: Container(
+                      width: MediaQuery.of(context).orientation == Orientation.portrait
+                          ? MediaQuery.of(context).size.width * 0.5 - 15 
+                          : MediaQuery.of(context).size.width * 0.25 - 15,
+                      color: Cor.verde_1,
+                      child: Center(
+                        child: Text(snap[index]['tarefa_nome']),
+                      ),
                     ),
                   );
                 },
-                );
+              );
+
             }
           ),
         ),

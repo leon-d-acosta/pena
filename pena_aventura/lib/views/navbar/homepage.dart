@@ -1,7 +1,7 @@
-import 'package:PenaAventura/cor.dart';
-import 'package:PenaAventura/views/perfil.dart';
-import 'package:PenaAventura/views/postos.dart';
-import 'package:PenaAventura/views/qr_scanner.dart';
+import 'package:PenaAventura/views/cores/cor.dart';
+import 'package:PenaAventura/views/perfil/perfil.dart';
+import 'package:PenaAventura/views/postos/postos.dart';
+import 'package:PenaAventura/views/postos/qr_tarefa/qr_scanner.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 

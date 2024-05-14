@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:PenaAventura/homepage.dart';
-import 'package:PenaAventura/views/login.dart';
+import 'package:PenaAventura/views/navbar/homepage.dart';
+import 'package:PenaAventura/views/login/login.dart';
 
 void main() {runApp(const MyApp());}
 

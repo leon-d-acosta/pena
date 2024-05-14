@@ -1,5 +1,5 @@
-import 'package:PenaAventura/cor.dart';
-import 'package:PenaAventura/views/perfil.dart';
+import 'package:PenaAventura/views/cores/cor.dart';
+import 'package:PenaAventura/views/perfil/perfil.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 

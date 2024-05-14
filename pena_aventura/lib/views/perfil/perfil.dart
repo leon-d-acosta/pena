@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:PenaAventura/cor.dart';
-import 'package:PenaAventura/views/login.dart';
+import 'package:PenaAventura/views/cores/cor.dart';
+import 'package:PenaAventura/views/login/login.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -101,7 +101,7 @@ class _PerfilState extends State<Perfil> {
                       List<String> fields = ['nome', 'apelido', 'email'];
                       return Container(
                         decoration: BoxDecoration(
-                          color: Cor.verde_1,
+                          color: Cor.azul_1,
                           borderRadius: BorderRadius.circular(10),
                         ),
                         height: MediaQuery.of(context).size.height,
@@ -121,9 +121,9 @@ class _PerfilState extends State<Perfil> {
                                 child: ListTile(
                                   title: Text(
                                     snap[0][field],
-                                    style: const TextStyle(color: Colors.white),
+                                    style: const TextStyle(color: Cor.branco),
                                   ),
-                                  trailing: field !='email'? const Icon(Icons.arrow_forward_ios, color: Colors.white,): const Icon(Icons.alternate_email, color: Colors.white,)
+                                  trailing: field !='email'? const Icon(Icons.arrow_forward_ios, color: Cor.branco,): const Icon(Icons.alternate_email, color: Cor.branco,)
                                 ),
                               ),
                             );

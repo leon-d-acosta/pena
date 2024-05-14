@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:PenaAventura/cor.dart';
-import 'package:PenaAventura/homepage.dart';
+import 'package:PenaAventura/views/cores/cor.dart';
+import 'package:PenaAventura/views/navbar/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
