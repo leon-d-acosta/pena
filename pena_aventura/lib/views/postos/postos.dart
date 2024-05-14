@@ -71,7 +71,7 @@ Future<List<dynamic>> _getData() async {
                       borderRadius: BorderRadius.circular(5),
                       color: snap[index]['estado'] == 0
                               ? Colors.grey
-                              :c.verde_1,
+                              :c.azul_1,
     
                     ),
                     width: MediaQuery.of(context).orientation == Orientation.portrait
@@ -80,8 +80,8 @@ Future<List<dynamic>> _getData() async {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(Icons.qr_code_2, color: c.preto, size: 35,),
-                        Text(snap[index]['tarefa_nome'], style: const TextStyle(color: c.preto, fontSize: 20),),
+                        const Icon(Icons.qr_code_2, color: c.branco, size: 35,),
+                        Text(snap[index]['tarefa_nome'], style: const TextStyle(color: c.branco, fontSize: 20),),
                       ],
                     ),
                   ),

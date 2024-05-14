@@ -6,9 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
-
 class Login extends StatelessWidget {
-   Login({super.key});
+  Login({Key? key});
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -29,7 +28,7 @@ class Login extends StatelessWidget {
         'password': passwordController.text,
       },
     );
-    
+
     if (response.statusCode == 200) {
       var decodedData;
       try {
@@ -39,21 +38,22 @@ class Login extends StatelessWidget {
       }
 
       if (decodedData != null && decodedData['status'] != null) {
-        if (decodedData['status']=='success' || decodedData['status'] == true) {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          prefs.setInt('id', int.parse(decodedData['utilizador']['id']));
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const HomePage()),
-          );
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(decodedData['status_message'] ?? 'Error desconocido'),
-          ));
-        }
-      } else {
-        print("aqui rompe");
-      }
+  if (decodedData['status'] == 'success' || decodedData['status'] == true) {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('isLoggedIn', true); // Actualiza el estado de inicio de sesión
+    prefs.setInt('id', int.parse(decodedData['utilizador']['id']));
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const HomePage()),
+    );
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(decodedData['status_message'] ?? 'Error desconocido'),
+    ));
+  }
+} else {
+  print("aqui rompe");
+}
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('Error de conexión: ${response.statusCode} - ${response.reasonPhrase}'),
@@ -67,7 +67,7 @@ class Login extends StatelessWidget {
     return Scaffold(
       body: Container(
         color: c.cinza,
-        child:  Center(
+        child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -82,7 +82,7 @@ class Login extends StatelessWidget {
                     margin: const EdgeInsets.only(left: 40, right: 40),
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(10)
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     child: Theme(
                       data: Theme.of(context).copyWith(
@@ -99,18 +99,18 @@ class Login extends StatelessWidget {
                           }),
                         ),
                       ),
-                    child: TextField(
-                      controller: emailController,
-                      cursorColor: c.preto,
-                      obscureText: false,
-                      decoration: const InputDecoration(
-                        labelStyle: TextStyle(color: c.preto),
-                        icon: Icon(Icons.person),
-                        label: Text("Correo eletronico"),
-                        border: InputBorder.none,
-                        filled: false,
+                      child: TextField(
+                        controller: emailController,
+                        cursorColor: c.preto,
+                        obscureText: false,
+                        decoration: const InputDecoration(
+                          labelStyle: TextStyle(color: c.preto),
+                          icon: Icon(Icons.person),
+                          label: Text("Correo eletronico"),
+                          border: InputBorder.none,
+                          filled: false,
+                        ),
                       ),
-                    ),
                     ),
                   ),
                   const SizedBox(height: 10,),
@@ -119,7 +119,7 @@ class Login extends StatelessWidget {
                     margin: const EdgeInsets.only(left: 40, right: 40),
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(10)
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     child: Theme(
                       data: Theme.of(context).copyWith(
@@ -136,40 +136,40 @@ class Login extends StatelessWidget {
                           }),
                         ),
                       ),
-                    child: TextField(
-                      controller: passwordController,
-                      cursorColor: c.preto,
-                      obscureText: true,
-                      decoration: const InputDecoration(
-                        labelStyle: TextStyle(color: c.preto),
-                        icon: Icon(Icons.lock),
-                        label: Text("Palavra-passe"),
-                        border: InputBorder.none,
-                        filled: false,
+                      child: TextField(
+                        controller: passwordController,
+                        cursorColor: c.preto,
+                        obscureText: true,
+                        decoration: const InputDecoration(
+                          labelStyle: TextStyle(color: c.preto),
+                          icon: Icon(Icons.lock),
+                          label: Text("Palavra-passe"),
+                          border: InputBorder.none,
+                          filled: false,
+                        ),
                       ),
-                    ),
                     ),
                   ),
                 ],
               ),
               const SizedBox(height: 10,),
               GestureDetector(
-                onTap: ()=>loginFunction(context),
+                onTap: () => loginFunction(context),
                 child: Container(
                   width: MediaQuery.of(context).size.width,
                   padding: const EdgeInsets.all(10),
                   margin: const EdgeInsets.only(left: 40, right: 40),
                   decoration: BoxDecoration(
                     color: c.verde_1,
-                    borderRadius: BorderRadius.circular(10)
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  child: const Center(child: Text("Enviar", style: TextStyle(color: c.branco, fontWeight: FontWeight.bold, fontSize: 15),),),
-                  )
-              )
+                  child: const Center(child: Text("Enviar", style: TextStyle(color: c.branco, fontWeight: FontWeight.bold, fontSize: 15),)),
+                ),
+              ),
             ],
-          )
+          ),
         ),
       ),
     );
-  } 
+  }
 }

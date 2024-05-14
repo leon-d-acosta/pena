@@ -36,88 +36,90 @@ class _Qr_ScannerState extends State<Qr_Scanner> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          return SizedBox(
-            height: constraints.maxHeight,
-            width: constraints.maxWidth,
-            child: Column(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(30),
-                  height: constraints.maxHeight / 3.5,
-                  width: constraints.maxWidth,
-                  color: c.cinza,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text("Pesquisar por", style: TextStyle(color: c.preto, fontSize: 20)),
-                      const Text("ID", style: TextStyle(color: c.verde_1, fontSize: 30, fontWeight: FontWeight.bold)),
-                      Container(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: TextField(
-                          controller: idController,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      GestureDetector(
-                        onTap: () => print(idController.text),
-                        child: Container(
-                          width: constraints.maxWidth,
-                          decoration: BoxDecoration(
-                            color: c.verde_1,
-                            borderRadius: BorderRadius.circular(5),
+    return SafeArea(
+      child: Scaffold(
+        body: LayoutBuilder(
+          builder: (context, constraints) {
+            return SizedBox(
+              height: constraints.maxHeight,
+              width: constraints.maxWidth,
+              child: Column(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(30),
+                    height: constraints.maxHeight / 3.5,
+                    width: constraints.maxWidth,
+                    color: c.cinza,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        //const Text("Pesquisar por", style: TextStyle(color: c.preto, fontSize: 20)),
+                        const Text("QRCODE", style: TextStyle(color: c.verde_1, fontSize: 30, fontWeight: FontWeight.bold)),
+                        Container(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: TextField(
+                            controller: idController,
                           ),
-                          padding: const EdgeInsets.all(10),
-                          child: const Center(child: Text("Pesquisar", style: TextStyle(color: c.branco, fontSize: 15, fontWeight: FontWeight.bold))),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    color: Colors.grey, // Cambia al color deseado
-                    child: MobileScanner(
-                      controller: MobileScannerController(detectionSpeed: DetectionSpeed.normal),
-                      onDetect: (capture) {
-                        if (!_redirecting) {
-                          final List<Barcode> barcodes = capture.barcodes;
-                          for (final barcode in barcodes) {
-                            print("Barcode: ${barcode.rawValue}");
-                          }
-                          if (barcodes.isNotEmpty) {
-                            setState(() {
-                              _redirecting = true;
-                            });
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => SearchTarefa(nome_atividade: widget.nome_atividade,),
-                              ),
-                            ).then((value) {
-                              setState(() {
-                                _redirecting = false; // Re-enable scanning when returning from SearchTarefa
-                              });
-                            });
-                          }
-                        }
-                      },
+                        const SizedBox(height: 10),
+                        GestureDetector(
+                          onTap: () => print(idController.text),
+                          child: Container(
+                            width: constraints.maxWidth,
+                            decoration: BoxDecoration(
+                              color: c.verde_1,
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            padding: const EdgeInsets.all(10),
+                            child: const Center(child: Text("Pesquisar", style: TextStyle(color: c.branco, fontSize: 15, fontWeight: FontWeight.bold))),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
-              ],
-            ),
-          );
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.pop(context),
-        foregroundColor: c.branco,
-        backgroundColor: c.azul_1,
-        elevation: 10,
-        child: const Icon(Icons.arrow_back),
+                  Expanded(
+                    child: Container(
+                      color: Colors.grey, // Cambia al color deseado
+                      child: MobileScanner(
+                        controller: MobileScannerController(detectionSpeed: DetectionSpeed.normal),
+                        onDetect: (capture) {
+                          if (!_redirecting) {
+                            final List<Barcode> barcodes = capture.barcodes;
+                            for (final barcode in barcodes) {
+                              print("Barcode: ${barcode.rawValue}");
+                            }
+                            if (barcodes.isNotEmpty) {
+                              setState(() {
+                                _redirecting = true;
+                              });
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SearchTarefa(nome_atividade: widget.nome_atividade,),
+                                ),
+                              ).then((value) {
+                                setState(() {
+                                  _redirecting = false; // Re-enable scanning when returning from SearchTarefa
+                                });
+                              });
+                            }
+                          }
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => Navigator.pop(context),
+          foregroundColor: c.branco,
+          backgroundColor: c.azul_1,
+          elevation: 10,
+          child: const Icon(Icons.arrow_back),
+        ),
       ),
     );
   }
