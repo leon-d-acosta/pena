@@ -3,6 +3,7 @@ import 'package:PenaAventura/views/perfil/perfil.dart';
 import 'package:PenaAventura/views/postos/postos.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -24,9 +25,13 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: views[_selectedIndex],
       bottomNavigationBar: CurvedNavigationBar(
-        buttonBackgroundColor: c.azul_1,
+        buttonBackgroundColor: _selectedIndex == 1
+                              ? c.azul_1
+                              : c.verde_1,
         backgroundColor: c.cinza!,
-        color: c.azul_1,
+        color: _selectedIndex == 1
+                ? c.azul_1
+                : c.verde_1,
         animationDuration: const Duration(milliseconds: 300),
         height: 60,
         index: _selectedIndex,

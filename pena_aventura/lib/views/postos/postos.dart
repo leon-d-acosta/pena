@@ -80,8 +80,8 @@ Future<List<dynamic>> _getData() async {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(Icons.qr_code_2, color: c.azul_1, size: 35,),
-                        Text(snap[index]['tarefa_nome'], style: const TextStyle(color: c.azul_1, fontSize: 20),),
+                        const Icon(Icons.qr_code_2, color: c.preto, size: 35,),
+                        Text(snap[index]['tarefa_nome'], style: const TextStyle(color: c.preto, fontSize: 20),),
                       ],
                     ),
                   ),
