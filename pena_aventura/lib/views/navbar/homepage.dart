@@ -24,9 +24,9 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: views[_selectedIndex],
       bottomNavigationBar: CurvedNavigationBar(
-        buttonBackgroundColor: Cor.azul_1,
-        backgroundColor: Cor.cinza!,
-        color: Cor.azul_1,
+        buttonBackgroundColor: c.azul_1,
+        backgroundColor: c.cinza!,
+        color: c.azul_1,
         animationDuration: const Duration(milliseconds: 300),
         height: 60,
         index: _selectedIndex,
@@ -36,8 +36,8 @@ class _HomePageState extends State<HomePage> {
           });
         },
         items: const [
-          Icon(Icons.list, color: Cor.branco, size: 30,),
-          Icon(Icons.account_circle, color: Cor.branco, size: 30,),
+          Icon(Icons.list, color: c.branco, size: 30,),
+          Icon(Icons.account_circle, color: c.branco, size: 30,),
         ],
       ),
     );

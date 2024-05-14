@@ -43,7 +43,7 @@ Future<List<dynamic>> _getData() async {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Cor.cinza,
+      backgroundColor: c.cinza,
       body: Padding(
         padding: const EdgeInsets.all(40),
         child: FutureBuilder(
@@ -71,7 +71,7 @@ Future<List<dynamic>> _getData() async {
                       borderRadius: BorderRadius.circular(5),
                       color: snap[index]['estado'] == 0
                               ? Colors.grey
-                              :Cor.verde_1,
+                              :c.verde_1,
     
                     ),
                     width: MediaQuery.of(context).orientation == Orientation.portrait
@@ -80,8 +80,8 @@ Future<List<dynamic>> _getData() async {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(Icons.qr_code_2, color: Cor.azul_1, size: 35,),
-                        Text(snap[index]['tarefa_nome'], style: const TextStyle(color: Cor.azul_1, fontSize: 20),),
+                        const Icon(Icons.qr_code_2, color: c.azul_1, size: 35,),
+                        Text(snap[index]['tarefa_nome'], style: const TextStyle(color: c.azul_1, fontSize: 20),),
                       ],
                     ),
                   ),

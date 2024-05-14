@@ -19,13 +19,11 @@ class _Qr_ScannerState extends State<Qr_Scanner> {
   @override
   void initState() {
     super.initState();
-    // Forzamos la orientación vertical al construir el widget
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   }
 
   @override
   void dispose() {
-    // Habilitamos todas las orientaciones nuevamente al descartar el widget
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown, DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
     super.dispose();
   }
@@ -41,12 +39,12 @@ class _Qr_ScannerState extends State<Qr_Scanner> {
               padding: const EdgeInsets.all(30),
               height: MediaQuery.of(context).size.height/3.5,
               width: MediaQuery.of(context).size.width,
-              color: Cor.cinza,
+              color: c.cinza,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text("Pesquisar por", style: TextStyle(color: Cor.preto, fontSize: 20),),
-                  const Text("ID", style: TextStyle(color: Cor.verde_1, fontSize: 30, fontWeight: FontWeight.bold),),
+                  const Text("Pesquisar por", style: TextStyle(color: c.preto, fontSize: 20),),
+                  const Text("ID", style: TextStyle(color: c.verde_1, fontSize: 30, fontWeight: FontWeight.bold),),
                   Container(
                     padding: const EdgeInsets.only(left: 10),
                     child: TextField(
@@ -59,11 +57,11 @@ class _Qr_ScannerState extends State<Qr_Scanner> {
                     child: Container(
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
-                        color: Cor.verde_1,
+                        color: c.verde_1,
                         borderRadius: BorderRadius.circular(5)
                       ),
                       padding: const EdgeInsets.all(10),
-                      child: const Center(child: Text("Pesquisar", style: TextStyle(color: Cor.branco, fontSize: 15, fontWeight: FontWeight.bold),)),
+                      child: const Center(child: Text("Pesquisar", style: TextStyle(color: c.branco, fontSize: 15, fontWeight: FontWeight.bold),)),
                     ),
                   )
                 ],
@@ -71,7 +69,7 @@ class _Qr_ScannerState extends State<Qr_Scanner> {
             ),
             Container(
               height: MediaQuery.of(context).size.height/1.3,
-              color: Cor.cinza,
+              color: c.cinza,
               child: MobileScanner(
                 controller: MobileScannerController(
                   detectionSpeed: DetectionSpeed.noDuplicates,
@@ -97,8 +95,8 @@ class _Qr_ScannerState extends State<Qr_Scanner> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: ()=>Navigator.pop(context),
-        foregroundColor: Cor.branco,
-        backgroundColor: Cor.azul_1,
+        foregroundColor: c.branco,
+        backgroundColor: c.azul_1,
         elevation: 10,
         child: const Icon(Icons.arrow_back),
       ),

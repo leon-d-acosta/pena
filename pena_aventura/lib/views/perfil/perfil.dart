@@ -65,7 +65,7 @@ class _PerfilState extends State<Perfil> {
     return Stack(
       children: [
         Container(
-          color: Cor.cinza,
+          color: c.cinza,
           height: double.infinity,
           padding: const EdgeInsets.all(20),
           child: Column(
@@ -75,10 +75,10 @@ class _PerfilState extends State<Perfil> {
                 child:  Center(
                   child: Column(
                     children: [
-                      Icon(Icons.account_circle, color: Cor.azul_1, size: MediaQuery.of(context).orientation == Orientation.portrait
+                      Icon(Icons.account_circle, color: c.azul_1, size: MediaQuery.of(context).orientation == Orientation.portrait
                                                                                                                     ? 100
                                                                                                                     : 50),
-                      Text("M E U     P E R F I L", style: TextStyle(color: Cor.azul_1, fontSize: MediaQuery.of(context).orientation == Orientation.portrait
+                      Text("M E U     P E R F I L", style: TextStyle(color: c.azul_1, fontSize: MediaQuery.of(context).orientation == Orientation.portrait
                                                                                                                                             ? 30
                                                                                                                                             : 25)),
                     ],
@@ -107,7 +107,7 @@ class _PerfilState extends State<Perfil> {
                     List<String> fields = ['nome', 'apelido', 'email'];
                     return Container(
                       decoration: BoxDecoration(
-                        color: Cor.azul_1,
+                        color: c.azul_1,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       height: MediaQuery.of(context).size.height,
@@ -124,9 +124,9 @@ class _PerfilState extends State<Perfil> {
                             child: ListTile(
                               title: Text(
                                 snap[0][field],
-                                style: const TextStyle(color: Cor.branco),
+                                style: const TextStyle(color: c.branco),
                               ),
-                              trailing: field != 'email' ? const Icon(Icons.arrow_forward_ios, color: Cor.branco,) : const Icon(Icons.alternate_email, color: Cor.branco,),
+                              trailing: field != 'email' ? const Icon(Icons.arrow_forward_ios, color: c.branco,) : const Icon(Icons.alternate_email, color: c.branco,),
                             ),
                           );
                         }),
@@ -153,12 +153,12 @@ class _PerfilState extends State<Perfil> {
                 children: [
                   Text(
                     'LOGOUT  ',
-                    style: TextStyle(color: Cor.branco, fontSize: 15, fontWeight: FontWeight.bold),
+                    style: TextStyle(color: c.branco, fontSize: 15, fontWeight: FontWeight.bold),
                   ),
                   Icon(
                     Icons.logout,
                     size: 20,
-                    color: Cor.branco,
+                    color: c.branco,
                   ),
                 ],
               ),

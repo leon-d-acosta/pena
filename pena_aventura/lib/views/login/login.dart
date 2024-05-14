@@ -66,14 +66,14 @@ class Login extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Cor.cinza,
+        color: c.cinza,
         child:  Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Icon(Icons.account_circle_rounded, color: Cor.azul_1, size: 150,),
-              const Text("L O G I N", style: TextStyle(color: Cor.azul_1, fontSize: 20, fontWeight: FontWeight.bold),),
+              const Icon(Icons.account_circle_rounded, color: c.azul_1, size: 150,),
+              const Text("L O G I N", style: TextStyle(color: c.azul_1, fontSize: 20, fontWeight: FontWeight.bold),),
               const SizedBox(height: 10,),
               Column(
                 children: [
@@ -86,14 +86,14 @@ class Login extends StatelessWidget {
                     ),
                     child: Theme(
                       data: Theme.of(context).copyWith(
-                        primaryColor: Cor.azul_1,
+                        primaryColor: c.azul_1,
                         inputDecorationTheme: Theme.of(context).inputDecorationTheme.copyWith(
                           iconColor: MaterialStateColor.resolveWith((Set<MaterialState> states) {
                             if (states.contains(MaterialState.focused)) {
-                              return Cor.azul_1;
+                              return c.azul_1;
                             }
                             if (states.contains(MaterialState.error)) {
-                              return Cor.azul_1;
+                              return c.azul_1;
                             }
                             return Colors.grey;
                           }),
@@ -101,10 +101,10 @@ class Login extends StatelessWidget {
                       ),
                     child: TextField(
                       controller: emailController,
-                      cursorColor: Cor.preto,
+                      cursorColor: c.preto,
                       obscureText: false,
                       decoration: const InputDecoration(
-                        labelStyle: TextStyle(color: Cor.preto),
+                        labelStyle: TextStyle(color: c.preto),
                         icon: Icon(Icons.person),
                         label: Text("Correo eletronico"),
                         border: InputBorder.none,
@@ -123,14 +123,14 @@ class Login extends StatelessWidget {
                     ),
                     child: Theme(
                       data: Theme.of(context).copyWith(
-                        primaryColor: Cor.azul_1,
+                        primaryColor: c.azul_1,
                         inputDecorationTheme: Theme.of(context).inputDecorationTheme.copyWith(
                           iconColor: MaterialStateColor.resolveWith((Set<MaterialState> states) {
                             if (states.contains(MaterialState.focused)) {
-                              return Cor.azul_1;
+                              return c.azul_1;
                             }
                             if (states.contains(MaterialState.error)) {
-                              return Cor.azul_1;
+                              return c.azul_1;
                             }
                             return Colors.grey;
                           }),
@@ -138,10 +138,10 @@ class Login extends StatelessWidget {
                       ),
                     child: TextField(
                       controller: passwordController,
-                      cursorColor: Cor.preto,
+                      cursorColor: c.preto,
                       obscureText: true,
                       decoration: const InputDecoration(
-                        labelStyle: TextStyle(color: Cor.preto),
+                        labelStyle: TextStyle(color: c.preto),
                         icon: Icon(Icons.lock),
                         label: Text("Palavra-passe"),
                         border: InputBorder.none,
@@ -160,10 +160,10 @@ class Login extends StatelessWidget {
                   padding: const EdgeInsets.all(10),
                   margin: const EdgeInsets.only(left: 40, right: 40),
                   decoration: BoxDecoration(
-                    color: Cor.verde_1,
+                    color: c.verde_1,
                     borderRadius: BorderRadius.circular(10)
                   ),
-                  child: const Center(child: Text("Enviar", style: TextStyle(color: Cor.branco, fontWeight: FontWeight.bold, fontSize: 15),),),
+                  child: const Center(child: Text("Enviar", style: TextStyle(color: c.branco, fontWeight: FontWeight.bold, fontSize: 15),),),
                   )
               )
             ],

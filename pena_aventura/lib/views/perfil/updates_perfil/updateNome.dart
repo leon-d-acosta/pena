@@ -68,7 +68,7 @@ class _ChangeNomeAlertState extends State<ChangeNomeAlert> {
                 height: MediaQuery.of(context).size.height / 8,
                 child: Lottie.network("https://lottie.host/853a2a85-7c9a-4278-ae33-5b7a7a65b873/gpwzArdGJN.json", fit: BoxFit.cover),
               ),
-              const Text("Inforamação trocada com sucesso", style: TextStyle(color: Cor.verde_1, fontSize: 20)),
+              const Text("Inforamação trocada com sucesso", style: TextStyle(color: c.verde_1, fontSize: 20)),
             ],
           ),
         ),
@@ -128,13 +128,13 @@ class _ChangeNomeAlertState extends State<ChangeNomeAlert> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Trocar meu nome", style: TextStyle(color: Cor.branco)),
-        foregroundColor: Cor.branco,
-        backgroundColor: Cor.azul_1.withAlpha(255),
+        title: const Text("Trocar meu nome", style: TextStyle(color: c.branco)),
+        foregroundColor: c.branco,
+        backgroundColor: c.azul_1.withAlpha(255),
       ),
       body: Container(
         width: MediaQuery.of(context).size.width,
-        color: Cor.cinza,
+        color: c.cinza,
         padding: const EdgeInsets.all(30),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -151,8 +151,8 @@ class _ChangeNomeAlertState extends State<ChangeNomeAlert> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text("Meu nome atual:", style: TextStyle(color: Cor.preto, fontSize: 18, fontWeight: FontWeight.bold)),
-                      Text(widget.nome, style: const TextStyle(color: Cor.azul_1, fontSize: 30, fontWeight: FontWeight.bold)),
+                      const Text("Meu nome atual:", style: TextStyle(color: c.preto, fontSize: 18, fontWeight: FontWeight.bold)),
+                      Text(widget.nome, style: const TextStyle(color: c.azul_1, fontSize: 30, fontWeight: FontWeight.bold)),
                     ],
                   ),
                   TextField(
@@ -161,7 +161,7 @@ class _ChangeNomeAlertState extends State<ChangeNomeAlert> {
                     decoration:   InputDecoration(
                         labelText: "Novo nome",
                         labelStyle: const TextStyle(
-                          color: Cor.preto,
+                          color: c.preto,
                           fontWeight: FontWeight.bold,
                           fontSize: 20,
                         ),
@@ -170,7 +170,7 @@ class _ChangeNomeAlertState extends State<ChangeNomeAlert> {
                         filled: false,
                         hintText: "Nome do utilizador",
                         hintStyle: TextStyle(
-                          color: Cor.preto.withOpacity(0.3),
+                          color: c.preto.withOpacity(0.3),
                         )),
                   ),
                 ],
@@ -185,10 +185,10 @@ class _ChangeNomeAlertState extends State<ChangeNomeAlert> {
                 padding: const EdgeInsets.all(15),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: Cor.verde_1,
+                  color: c.verde_1,
                 ),
                 child: const Center(
-                  child: Text('Salvar alteração', style: TextStyle(color: Cor.branco, fontSize: 18)),
+                  child: Text('Salvar alteração', style: TextStyle(color: c.branco, fontSize: 18)),
                 ),
               ),
             )
