@@ -1,7 +1,6 @@
 import 'package:PenaAventura/views/cores/cor.dart';
 import 'package:PenaAventura/views/perfil/perfil.dart';
 import 'package:PenaAventura/views/postos/postos.dart';
-import 'package:PenaAventura/views/postos/qr_tarefa/qr_scanner.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -13,13 +12,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _selectedIndex = 1;
+  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     final views = [
       const Postos(),
-      const Qr_Scanner(),
       const Perfil(),
     ];
 
@@ -39,7 +37,6 @@ class _HomePageState extends State<HomePage> {
         },
         items: const [
           Icon(Icons.list, color: Cor.branco, size: 30,),
-          Icon(Icons.qr_code_scanner, color: Cor.branco, size: 30,),
           Icon(Icons.account_circle, color: Cor.branco, size: 30,),
         ],
       ),

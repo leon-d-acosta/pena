@@ -3,24 +3,28 @@ import 'package:PenaAventura/views/perfil/perfil.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
+  final TextEditingController idController = TextEditingController();
 class Qr_Scanner extends StatefulWidget {
-  const Qr_Scanner({super.key});
+  final String nome_atividade;
+   const Qr_Scanner({super.key, required this.nome_atividade});
 
   @override
   State<Qr_Scanner> createState() => _Qr_ScannerState();
 }
 
 class _Qr_ScannerState extends State<Qr_Scanner> {
+
+
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      bottom: false,
-      child: Scaffold(
-        body: Column(
+    return Scaffold(
+      body: SizedBox(
+        height: MediaQuery.of(context).size.height,
+        child: Column(
           children: [
             Container(
-              padding: const EdgeInsets.all(20),
-              height: MediaQuery.of(context).size.height/4,
+              padding: const EdgeInsets.all(30),
+              height: MediaQuery.of(context).size.height/3.5,
               width: MediaQuery.of(context).size.width,
               color: Cor.cinza,
               child: Column(
@@ -30,10 +34,13 @@ class _Qr_ScannerState extends State<Qr_Scanner> {
                   const Text("ID", style: TextStyle(color: Cor.verde_1, fontSize: 30, fontWeight: FontWeight.bold),),
                   Container(
                     padding: const EdgeInsets.only(left: 10),
-                    child: const TextField(),
+                    child: TextField(
+                      controller: idController,
+                    ),
                   ),
                   const SizedBox(height: 10,),
                   GestureDetector(
+                    onTap: () => print(idController.text),
                     child: Container(
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
@@ -48,7 +55,7 @@ class _Qr_ScannerState extends State<Qr_Scanner> {
               ),
             ),
             Container(
-              height: MediaQuery.of(context).size.height/1.55,
+              height: MediaQuery.of(context).size.height/1.3,
               color: Cor.cinza,
               child: MobileScanner(
                 controller: MobileScannerController(
@@ -72,11 +79,18 @@ class _Qr_ScannerState extends State<Qr_Scanner> {
               },
               ),
             ),
-
-            
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: ()=>Navigator.pop(context),
+        foregroundColor: Cor.branco,
+        backgroundColor: Cor.azul_1,
+        elevation: 10,
+        child: const Icon(Icons.arrow_back),
+      ),
     );
   }
+  
+  onPressed() {}
 }

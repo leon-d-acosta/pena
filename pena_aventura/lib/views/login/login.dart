@@ -34,8 +34,6 @@ class Login extends StatelessWidget {
       var decodedData;
       try {
         decodedData = json.decode(response.body);
-        print(decodedData);
-        print(decodedData['status']);
       } catch (e) {
         print('Error al decodificar la respuesta del servidor: $e');
       }
