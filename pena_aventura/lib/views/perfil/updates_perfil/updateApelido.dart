@@ -141,7 +141,9 @@ class _ChangeApelidoState extends State<ChangeApelido> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              height: MediaQuery.of(context).size.height / 5,
+              height: MediaQuery.of(context).orientation == Orientation.portrait
+                                                            ?MediaQuery.of(context).size.height / 5
+                                                            :MediaQuery.of(context).size.height / 2.5,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -174,14 +176,17 @@ class _ChangeApelidoState extends State<ChangeApelido> {
                 ],
               ),
             ),
-            Lottie.network("https://lottie.host/8d7c8501-f8c9-4f93-8d1e-e0673d5476b6/H2VncRqa1x.json"),
+            Lottie.network("https://lottie.host/8d7c8501-f8c9-4f93-8d1e-e0673d5476b6/H2VncRqa1x.json", 
+              height: MediaQuery.of(context).orientation == Orientation.portrait?null:0,
+              width: MediaQuery.of(context).orientation == Orientation.portrait?null:0
+            ),
             GestureDetector(
               onTap: _authenticateWithBiometrics,
               child: Container(
                 padding: const EdgeInsets.all(15),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: const Color.fromARGB(247, 56, 153, 31),
+                  color: Cor.verde_1,
                 ),
                 child: const Center(
                   child: Text('Salvar alteração', style: TextStyle(color: Colors.white, fontSize: 18)),

@@ -141,7 +141,9 @@ class _ChangeNomeAlertState extends State<ChangeNomeAlert> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              height: MediaQuery.of(context).size.height / 5,
+              height: MediaQuery.of(context).orientation == Orientation.portrait
+                                                            ?MediaQuery.of(context).size.height / 5
+                                                            :MediaQuery.of(context).size.height / 2.5,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -156,9 +158,9 @@ class _ChangeNomeAlertState extends State<ChangeNomeAlert> {
                   TextField(
                     controller: nomeController,
                     obscureText: false,
-                    decoration: const InputDecoration(
+                    decoration:  InputDecoration(
                         labelText: "Novo nome",
-                        labelStyle: TextStyle(
+                        labelStyle: const TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
                           fontSize: 20,
@@ -168,20 +170,22 @@ class _ChangeNomeAlertState extends State<ChangeNomeAlert> {
                         filled: false,
                         hintText: "Nome do utilizador",
                         hintStyle: TextStyle(
-                          color: Colors.grey,
+                          color: Cor.cinza,
                         )),
                   ),
                 ],
               ),
             ),
-            Lottie.network("https://lottie.host/8d7c8501-f8c9-4f93-8d1e-e0673d5476b6/H2VncRqa1x.json"),
-            GestureDetector(
+              Lottie.network("https://lottie.host/8d7c8501-f8c9-4f93-8d1e-e0673d5476b6/H2VncRqa1x.json", 
+                height: MediaQuery.of(context).orientation == Orientation.portrait?null:0,
+                width: MediaQuery.of(context).orientation == Orientation.portrait?null:0
+              ),            GestureDetector(
               onTap: _authenticateWithBiometrics,
               child: Container(
                 padding: const EdgeInsets.all(15),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: const Color.fromARGB(247, 56, 153, 31),
+                  color: Cor.verde_1,
                 ),
                 child: const Center(
                   child: Text('Salvar alteração', style: TextStyle(color: Colors.white, fontSize: 18)),
