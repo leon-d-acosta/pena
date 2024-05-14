@@ -103,7 +103,7 @@ class _SearchTarefaState extends State<SearchTarefa> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Container(margin: const EdgeInsets.only(left: 40), child: Text("Alterar Sessão", style: TextStyle(color: c.branco, fontWeight: FontWeight.bold, fontSize: 15))),
+                                      Container(margin: const EdgeInsets.only(left: 20), child: Text("Alterar Sessão", style: TextStyle(color: c.branco, fontWeight: FontWeight.bold, fontSize: 15))),
                                       Container(
                                         decoration: BoxDecoration(
                                           color: c.verde_1,
@@ -206,7 +206,7 @@ class _SearchTarefaState extends State<SearchTarefa> {
                                         child: Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Container(margin: const EdgeInsets.only(left: 20), child: Text("Registrar", style: TextStyle(color: c.branco, fontWeight: FontWeight.bold, fontSize: 15))),
+                                            Container(margin: const EdgeInsets.only(left: 20), child: Text("Registar", style: TextStyle(color: c.branco, fontWeight: FontWeight.bold, fontSize: 15))),
                                             Container(
                                               decoration: BoxDecoration(
                                                 color: c.azul_2,
