@@ -128,13 +128,13 @@ class _ChangeNomeAlertState extends State<ChangeNomeAlert> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Trocar meu nome", style: TextStyle(color: Colors.white)),
-        foregroundColor: Colors.white,
+        title: const Text("Trocar meu nome", style: TextStyle(color: Cor.branco)),
+        foregroundColor: Cor.branco,
         backgroundColor: Cor.azul_1.withAlpha(255),
       ),
       body: Container(
         width: MediaQuery.of(context).size.width,
-        color: Cor.azul_1.withOpacity(0.1),
+        color: Cor.cinza,
         padding: const EdgeInsets.all(30),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -151,26 +151,26 @@ class _ChangeNomeAlertState extends State<ChangeNomeAlert> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text("Meu nome atual:", style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold)),
+                      const Text("Meu nome atual:", style: TextStyle(color: Cor.preto, fontSize: 18, fontWeight: FontWeight.bold)),
                       Text(widget.nome, style: const TextStyle(color: Cor.azul_1, fontSize: 30, fontWeight: FontWeight.bold)),
                     ],
                   ),
                   TextField(
                     controller: nomeController,
                     obscureText: false,
-                    decoration:  InputDecoration(
+                    decoration:   InputDecoration(
                         labelText: "Novo nome",
                         labelStyle: const TextStyle(
-                          color: Colors.black,
+                          color: Cor.preto,
                           fontWeight: FontWeight.bold,
                           fontSize: 20,
                         ),
                         floatingLabelBehavior: FloatingLabelBehavior.always,
-                        border: OutlineInputBorder(),
+                        border: const OutlineInputBorder(),
                         filled: false,
                         hintText: "Nome do utilizador",
                         hintStyle: TextStyle(
-                          color: Cor.cinza,
+                          color: Cor.preto.withOpacity(0.3),
                         )),
                   ),
                 ],
@@ -188,7 +188,7 @@ class _ChangeNomeAlertState extends State<ChangeNomeAlert> {
                   color: Cor.verde_1,
                 ),
                 child: const Center(
-                  child: Text('Salvar alteração', style: TextStyle(color: Colors.white, fontSize: 18)),
+                  child: Text('Salvar alteração', style: TextStyle(color: Cor.branco, fontSize: 18)),
                 ),
               ),
             )

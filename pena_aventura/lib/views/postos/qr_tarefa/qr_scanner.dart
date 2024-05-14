@@ -45,7 +45,7 @@ class _Qr_ScannerState extends State<Qr_Scanner> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text("Pesquisar por", style: TextStyle(color: Colors.black, fontSize: 20),),
+                  const Text("Pesquisar por", style: TextStyle(color: Cor.preto, fontSize: 20),),
                   const Text("ID", style: TextStyle(color: Cor.verde_1, fontSize: 30, fontWeight: FontWeight.bold),),
                   Container(
                     padding: const EdgeInsets.only(left: 10),

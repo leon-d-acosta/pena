@@ -101,10 +101,10 @@ class Login extends StatelessWidget {
                       ),
                     child: TextField(
                       controller: emailController,
-                      cursorColor: Colors.black,
+                      cursorColor: Cor.preto,
                       obscureText: false,
                       decoration: const InputDecoration(
-                        labelStyle: TextStyle(color: Colors.black),
+                        labelStyle: TextStyle(color: Cor.preto),
                         icon: Icon(Icons.person),
                         label: Text("Correo eletronico"),
                         border: InputBorder.none,
@@ -138,10 +138,10 @@ class Login extends StatelessWidget {
                       ),
                     child: TextField(
                       controller: passwordController,
-                      cursorColor: Colors.black,
+                      cursorColor: Cor.preto,
                       obscureText: true,
                       decoration: const InputDecoration(
-                        labelStyle: TextStyle(color: Colors.black),
+                        labelStyle: TextStyle(color: Cor.preto),
                         icon: Icon(Icons.lock),
                         label: Text("Palavra-passe"),
                         border: InputBorder.none,

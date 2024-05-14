@@ -128,13 +128,13 @@ class _ChangeApelidoState extends State<ChangeApelido> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Trocar meu apelido", style: TextStyle(color: Colors.white)),
-        foregroundColor: Colors.white,
+        title: const Text("Trocar meu apelido", style: TextStyle(color: Cor.branco)),
+        foregroundColor: Cor.branco,
         backgroundColor: Cor.azul_1.withAlpha(255),
       ),
       body: Container(
         width: MediaQuery.of(context).size.width,
-        color: Cor.azul_1.withOpacity(0.1),
+        color: Cor.cinza,
         padding: const EdgeInsets.all(30),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -151,26 +151,26 @@ class _ChangeApelidoState extends State<ChangeApelido> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text("Meu apelido atual:", style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold)),
+                      const Text("Meu apelido atual:", style: TextStyle(color: Cor.preto, fontSize: 18, fontWeight: FontWeight.bold)),
                       Text(widget.apelido, style: const TextStyle(color: Cor.azul_1, fontSize: 30, fontWeight: FontWeight.bold)),
                     ],
                   ),
                   TextField(
                     controller: apelidoController,
                     obscureText: false,
-                    decoration: const InputDecoration(
+                    decoration:  InputDecoration(
                         labelText: "Novo apelido",
-                        labelStyle: TextStyle(
-                          color: Colors.black,
+                        labelStyle: const TextStyle(
+                          color: Cor.preto,
                           fontWeight: FontWeight.bold,
                           fontSize: 20,
                         ),
                         floatingLabelBehavior: FloatingLabelBehavior.always,
-                        border: OutlineInputBorder(),
+                        border: const OutlineInputBorder(),
                         filled: false,
                         hintText: "apelido do utilizador",
                         hintStyle: TextStyle(
-                          color: Colors.grey,
+                          color: Cor.preto.withOpacity(0.3),
                         )),
                   ),
                 ],
@@ -189,7 +189,7 @@ class _ChangeApelidoState extends State<ChangeApelido> {
                   color: Cor.verde_1,
                 ),
                 child: const Center(
-                  child: Text('Salvar alteração', style: TextStyle(color: Colors.white, fontSize: 18)),
+                  child: Text('Salvar alteração', style: TextStyle(color: Cor.branco, fontSize: 18)),
                 ),
               ),
             )

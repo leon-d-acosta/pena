@@ -153,12 +153,12 @@ class _PerfilState extends State<Perfil> {
                 children: [
                   Text(
                     'LOGOUT  ',
-                    style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
+                    style: TextStyle(color: Cor.branco, fontSize: 15, fontWeight: FontWeight.bold),
                   ),
                   Icon(
                     Icons.logout,
                     size: 20,
-                    color: Colors.white,
+                    color: Cor.branco,
                   ),
                 ],
               ),
