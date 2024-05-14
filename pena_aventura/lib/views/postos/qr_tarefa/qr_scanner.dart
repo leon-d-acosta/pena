@@ -1,12 +1,14 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:PenaAventura/views/cores/cor.dart';
 import 'package:PenaAventura/views/perfil/perfil.dart';
-import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
-  final TextEditingController idController = TextEditingController();
+final TextEditingController idController = TextEditingController();
+
 class Qr_Scanner extends StatefulWidget {
   final String nome_atividade;
-   const Qr_Scanner({super.key, required this.nome_atividade});
+  const Qr_Scanner({super.key, required this.nome_atividade});
 
   @override
   State<Qr_Scanner> createState() => _Qr_ScannerState();
@@ -14,6 +16,19 @@ class Qr_Scanner extends StatefulWidget {
 
 class _Qr_ScannerState extends State<Qr_Scanner> {
 
+  @override
+  void initState() {
+    super.initState();
+    // Forzamos la orientación vertical al construir el widget
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  }
+
+  @override
+  void dispose() {
+    // Habilitamos todas las orientaciones nuevamente al descartar el widget
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown, DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,24 +74,22 @@ class _Qr_ScannerState extends State<Qr_Scanner> {
               color: Cor.cinza,
               child: MobileScanner(
                 controller: MobileScannerController(
-                detectionSpeed: DetectionSpeed.noDuplicates,
-              ),
-              onDetect: (capture) {
-                final List<Barcode> barcodes = capture.barcodes;
-            
-                for (final barcode in barcodes) {
-                  print("Barcode: ${barcode.rawValue}");
-                }
-            
-                if (barcodes.isNotEmpty) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const Perfil(),
-                    ),
-                  );
-                }
-              },
+                  detectionSpeed: DetectionSpeed.noDuplicates,
+                ),
+                onDetect: (capture) {
+                  final List<Barcode> barcodes = capture.barcodes;
+                  for (final barcode in barcodes) {
+                    print("Barcode: ${barcode.rawValue}");
+                  }
+                  if (barcodes.isNotEmpty) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const Perfil(),
+                      ),
+                    );
+                  }
+                },
               ),
             ),
           ],
@@ -91,6 +104,4 @@ class _Qr_ScannerState extends State<Qr_Scanner> {
       ),
     );
   }
-  
-  onPressed() {}
 }
