@@ -66,7 +66,7 @@ class Login extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: c.azul_1,
+        color: c.preto.withOpacity(0.6),
         child:  Center(
           child: Container(
             height: MediaQuery.of(context).orientation == Orientation.portrait
@@ -84,13 +84,13 @@ class Login extends StatelessWidget {
                  Icon(Icons.account_circle_rounded, color: c.azul_1, size: MediaQuery.of(context).orientation==Orientation.portrait
                                                                                                                 ?150
                                                                                                                 :60,),
-                 Text("L O G I N", style: TextStyle(color: c.azul_1, fontSize: 20, fontWeight: FontWeight.bold),),
+                 Text("INICIAR SESSÃO", style: TextStyle(color: c.azul_1, fontSize: 20, fontWeight: FontWeight.bold),),
                 const SizedBox(height: 10,),
                 Column(
                   children: [
                     Container(
                       padding: const EdgeInsets.all(5),
-                      margin: const EdgeInsets.only(left: 40, right: 40),
+                      margin: const EdgeInsets.only(left: 25, right: 25),
                       decoration: BoxDecoration(
                         color: Colors.grey[200],
                         borderRadius: BorderRadius.circular(10)
@@ -117,7 +117,7 @@ class Login extends StatelessWidget {
                         decoration: const InputDecoration(
                           labelStyle: TextStyle(color: c.preto),
                           icon: Icon(Icons.person),
-                          label: Text("Correo eletronico"),
+                          label: Text("Correo eletrónico"),
                           border: InputBorder.none,
                           filled: false,
                         ),
@@ -127,7 +127,7 @@ class Login extends StatelessWidget {
                     const SizedBox(height: 10,),
                     Container(
                       padding: const EdgeInsets.all(5),
-                      margin: const EdgeInsets.only(left: 40, right: 40),
+                      margin: const EdgeInsets.only(left: 25, right: 25),
                       decoration: BoxDecoration(
                         color: Colors.grey[200],
                         borderRadius: BorderRadius.circular(10)
@@ -169,13 +169,13 @@ class Login extends StatelessWidget {
                   child: Container(
                     width: MediaQuery.of(context).size.width,
                     padding: const EdgeInsets.all(10),
-                    margin: const EdgeInsets.only(left: 40, right: 40),
+                    margin: const EdgeInsets.only(left: 25, right: 25),
                     decoration: BoxDecoration(
                       color: c.verde_1,
                       borderRadius: BorderRadius.circular(10)
                     ),
                     child: const Center(
-                      child: Text("Enviar", style: TextStyle(
+                      child: Text("Iniciar sessão", style: TextStyle(
                         color: c.branco, 
                         fontWeight: FontWeight.bold, 
                         fontSize: 15)
