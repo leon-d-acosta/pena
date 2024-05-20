@@ -18,12 +18,12 @@ class _LoginState extends State<Login> { // Constructor de la clase 'Login' con 
   String? email, palavra_passe;
 
   @override
-  void initState() {
+  void initState() { //funcion que realizara cada vez que entre en la vista                                           
     super.initState();
     RememberMe();
   }
 
-  RememberMe() async{
+  RememberMe() async{ //funcion que realizara el loginm automatico en caso de que esten guardados dentro del celular el mail y la contrasenha
     SharedPreferences prefs = await SharedPreferences.getInstance();
     email = prefs.getString('email');
     palavra_passe = prefs.getString('palavra-passe');
@@ -53,7 +53,7 @@ class _LoginState extends State<Login> { // Constructor de la clase 'Login' con 
       return; // Sale de la función si hay datos insuficientes.
     }
 
-    var url = Uri.parse('https://lavandaria.oxb.pt/index.php/login_entrar'); // Define la URL de la solicitud de inicio de sesión.
+    var url = Uri.parse('https://adminpena.oxb.pt/index.php/loginentrar'); // Define la URL de la solicitud de inicio de sesión.
     final response = await http.post( // Realiza una solicitud POST a la URL.
         url,
         body: {
@@ -74,8 +74,8 @@ class _LoginState extends State<Login> { // Constructor de la clase 'Login' con 
         if (decodedData['status']=='success' || decodedData['status'] == true) { // Verifica si el estado es 'success'.
           SharedPreferences prefs = await SharedPreferences.getInstance(); // Obtiene una instancia de preferencias compartidas.
           prefs.setInt('id', int.parse(decodedData['utilizador']['id'])); // Guarda el ID del usuario en las preferencias compartidas.
-          prefs.setString('email', emailController.text);
-          prefs.setString('palavra-passe', passwordController.text);
+          prefs.setString('email', emailController.text); // Guarda el mail del usuario, esto para hacer el login automatico
+          prefs.setString('palavra-passe', passwordController.text); // Guarda la contrasenha del usuario para el login automatico
           Navigator.push( // Navega a la página de inicio.
             context,
             MaterialPageRoute(builder: (context) => const HomePage()),

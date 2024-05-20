@@ -30,13 +30,13 @@ class _PostosState extends State<Postos> {
 Future<List<dynamic>> _getData() async {
     int id = (await _getid()) ?? 0;
 
-    var url = Uri.parse('https://lavandaria.oxb.pt/index.php/get_tarefas_app');
+    var url = Uri.parse('https://adminpena.oxb.pt/index.php/getpostosapp');
     var response  = await http.post(url, body: {'id': id.toString()});
 
     if (response.statusCode == 200) {
       return json.decode(response.body);
     } else {
-      throw Exception('Error al obtener los datos 233');
+      throw Exception('Error al obtener los datos');
     }
   }
 
@@ -65,13 +65,11 @@ Future<List<dynamic>> _getData() async {
               ), 
               itemBuilder: (context, index) {
                 return GestureDetector(
-                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Qr_Scanner(id_posto: snap[index]['id_posto'],))),
+                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Qr_Scanner(id_posto: snap[index]['id'],))),
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
-                      color: snap[index]['estado'] == 0
-                              ?Colors.grey
-                              :c.azul_1,
+                      color: c.azul_1,
     
                     ),
                     width: MediaQuery.of(context).orientation == Orientation.portrait
@@ -79,13 +77,8 @@ Future<List<dynamic>> _getData() async {
                         : MediaQuery.of(context).size.width * 0.25 - 15,
                     child: Column(
                       children: [
-                        ClipRRect(borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5)), child: Image.network("https://packs.lifecooler.com/wondermedias/sys_master/productmedias/h6b/hbe/661534-560x373.jpg")),
-                        Container(margin: const EdgeInsets.only(left: 20, right: 20), child: Text(snap[index]['tarefa_nome'], style: TextStyle(
-                                                                                                                                          color: snap[index]['estado']==0
-                                                                                                                                                         ?c.preto
-                                                                                                                                                         :c.branco,
-                                                                                                                                          fontSize: 18
-                                                                                                                                          ),)),
+                        Container(height: MediaQuery.of(context).size.height/8, child: ClipRRect(borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5)), child: Image.network(snap[index]['foto'], fit: BoxFit.fill,))),
+                        Container(margin: const EdgeInsets.only(left: 20, right: 20), child: Text(snap[index]['nome'], style: TextStyle(color: c.branco, fontSize: 16 ),)),
                       ],
                     ),
                   ),
