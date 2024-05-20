@@ -69,7 +69,9 @@ class Login extends StatelessWidget {
         color: c.azul_1,
         child:  Center(
           child: Container(
-            height: MediaQuery.of(context).size.height/1.5,
+            height: MediaQuery.of(context).orientation == Orientation.portrait
+                                                ? MediaQuery.of(context).size.height/1.5
+                                                : MediaQuery.of(context).size.height/1.1,
             width: MediaQuery.of(context).size.width/1.1,
             decoration: BoxDecoration(
               color: c.cinza,
@@ -79,8 +81,10 @@ class Login extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Icon(Icons.account_circle_rounded, color: c.azul_1, size: 150,),
-                const Text("L O G I N", style: TextStyle(color: c.azul_1, fontSize: 20, fontWeight: FontWeight.bold),),
+                 Icon(Icons.account_circle_rounded, color: c.azul_1, size: MediaQuery.of(context).orientation==Orientation.portrait
+                                                                                                                ?150
+                                                                                                                :60,),
+                 Text("L O G I N", style: TextStyle(color: c.azul_1, fontSize: 20, fontWeight: FontWeight.bold),),
                 const SizedBox(height: 10,),
                 Column(
                   children: [
@@ -170,7 +174,13 @@ class Login extends StatelessWidget {
                       color: c.verde_1,
                       borderRadius: BorderRadius.circular(10)
                     ),
-                    child: const Center(child: Text("Enviar", style: TextStyle(color: c.branco, fontWeight: FontWeight.bold, fontSize: 15),),),
+                    child: const Center(
+                      child: Text("Enviar", style: TextStyle(
+                        color: c.branco, 
+                        fontWeight: FontWeight.bold, 
+                        fontSize: 15)
+                        )
+                      ),
                     )
                 )
               ],
