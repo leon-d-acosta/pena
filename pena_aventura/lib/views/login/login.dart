@@ -15,7 +15,13 @@ class Login extends StatelessWidget { // Define una clase de widget sin estado l
   Future<void> loginFunction(BuildContext context) async { // Define una función asíncrona para manejar el inicio de sesión.
     if (emailController.text.isEmpty || passwordController.text.isEmpty) { // Verifica si los campos de texto están vacíos.
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar( // Muestra un mensaje de error si los campos están vacíos.
-        content: Text('Datos insuficientes'),
+        content: Center(
+          child: Text('Datos insuficientes', style: TextStyle(
+            color: c.branco, 
+            fontWeight: FontWeight.bold
+          ),),
+        ),
+        backgroundColor: Color.fromARGB(255, 216, 59, 48),
       ));
       return; // Sale de la función si hay datos insuficientes.
     }
@@ -47,7 +53,8 @@ class Login extends StatelessWidget { // Define una clase de widget sin estado l
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar( // Muestra un mensaje de error si el inicio de sesión falla.
-            content: Text(decodedData['status_message'] ?? 'Error desconocido'),
+            content: Center(child: Text(decodedData['status_message'] ?? 'Error desconocido', style: TextStyle(color: c.branco, fontWeight: FontWeight.bold),)),
+            backgroundColor: Color.fromARGB(255, 216, 59, 48),
           ));
         }
       } else {
@@ -55,7 +62,8 @@ class Login extends StatelessWidget { // Define una clase de widget sin estado l
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar( // Muestra un mensaje de error si la solicitud no fue exitosa.
-        content: Text('Error de conexión: ${response.statusCode} - ${response.reasonPhrase}'),
+        content: Text('Error de conexión: ${response.statusCode} - ${response.reasonPhrase}', style: TextStyle(color: c.preto, fontWeight: FontWeight.bold),),
+        backgroundColor: Colors.amber[800],
       ));
       print('Error de conexión: ${response.statusCode} - ${response.reasonPhrase}'); // Imprime detalles del error de conexión.
     }
