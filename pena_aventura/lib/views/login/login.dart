@@ -66,107 +66,115 @@ class Login extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: c.cinza,
+        color: c.azul_1,
         child:  Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Icon(Icons.account_circle_rounded, color: c.azul_1, size: 150,),
-              const Text("L O G I N", style: TextStyle(color: c.azul_1, fontSize: 20, fontWeight: FontWeight.bold),),
-              const SizedBox(height: 10,),
-              Column(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(5),
-                    margin: const EdgeInsets.only(left: 40, right: 40),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(10)
-                    ),
-                    child: Theme(
-                      data: Theme.of(context).copyWith(
-                        primaryColor: c.azul_1,
-                        inputDecorationTheme: Theme.of(context).inputDecorationTheme.copyWith(
-                          iconColor: MaterialStateColor.resolveWith((Set<MaterialState> states) {
-                            if (states.contains(MaterialState.focused)) {
-                              return c.azul_1;
-                            }
-                            if (states.contains(MaterialState.error)) {
-                              return c.azul_1;
-                            }
-                            return Colors.grey;
-                          }),
+          child: Container(
+            height: MediaQuery.of(context).size.height/1.5,
+            width: MediaQuery.of(context).size.width/1.1,
+            decoration: BoxDecoration(
+              color: c.cinza,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Icon(Icons.account_circle_rounded, color: c.azul_1, size: 150,),
+                const Text("L O G I N", style: TextStyle(color: c.azul_1, fontSize: 20, fontWeight: FontWeight.bold),),
+                const SizedBox(height: 10,),
+                Column(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(5),
+                      margin: const EdgeInsets.only(left: 40, right: 40),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(10)
+                      ),
+                      child: Theme(
+                        data: Theme.of(context).copyWith(
+                          primaryColor: c.azul_1,
+                          inputDecorationTheme: Theme.of(context).inputDecorationTheme.copyWith(
+                            iconColor: MaterialStateColor.resolveWith((Set<MaterialState> states) {
+                              if (states.contains(MaterialState.focused)) {
+                                return c.azul_1;
+                              }
+                              if (states.contains(MaterialState.error)) {
+                                return c.azul_1;
+                              }
+                              return Colors.grey;
+                            }),
+                          ),
+                        ),
+                      child: TextField(
+                        controller: emailController,
+                        cursorColor: c.preto,
+                        obscureText: false,
+                        decoration: const InputDecoration(
+                          labelStyle: TextStyle(color: c.preto),
+                          icon: Icon(Icons.person),
+                          label: Text("Correo eletronico"),
+                          border: InputBorder.none,
+                          filled: false,
                         ),
                       ),
-                    child: TextField(
-                      controller: emailController,
-                      cursorColor: c.preto,
-                      obscureText: false,
-                      decoration: const InputDecoration(
-                        labelStyle: TextStyle(color: c.preto),
-                        icon: Icon(Icons.person),
-                        label: Text("Correo eletronico"),
-                        border: InputBorder.none,
-                        filled: false,
                       ),
                     ),
-                    ),
-                  ),
-                  const SizedBox(height: 10,),
-                  Container(
-                    padding: const EdgeInsets.all(5),
-                    margin: const EdgeInsets.only(left: 40, right: 40),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(10)
-                    ),
-                    child: Theme(
-                      data: Theme.of(context).copyWith(
-                        primaryColor: c.azul_1,
-                        inputDecorationTheme: Theme.of(context).inputDecorationTheme.copyWith(
-                          iconColor: MaterialStateColor.resolveWith((Set<MaterialState> states) {
-                            if (states.contains(MaterialState.focused)) {
-                              return c.azul_1;
-                            }
-                            if (states.contains(MaterialState.error)) {
-                              return c.azul_1;
-                            }
-                            return Colors.grey;
-                          }),
+                    const SizedBox(height: 10,),
+                    Container(
+                      padding: const EdgeInsets.all(5),
+                      margin: const EdgeInsets.only(left: 40, right: 40),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(10)
+                      ),
+                      child: Theme(
+                        data: Theme.of(context).copyWith(
+                          primaryColor: c.azul_1,
+                          inputDecorationTheme: Theme.of(context).inputDecorationTheme.copyWith(
+                            iconColor: MaterialStateColor.resolveWith((Set<MaterialState> states) {
+                              if (states.contains(MaterialState.focused)) {
+                                return c.azul_1;
+                              }
+                              if (states.contains(MaterialState.error)) {
+                                return c.azul_1;
+                              }
+                              return Colors.grey;
+                            }),
+                          ),
+                        ),
+                      child: TextField(
+                        controller: passwordController,
+                        cursorColor: c.preto,
+                        obscureText: true,
+                        decoration: const InputDecoration(
+                          labelStyle: TextStyle(color: c.preto),
+                          icon: Icon(Icons.lock),
+                          label: Text("Palavra-passe"),
+                          border: InputBorder.none,
+                          filled: false,
                         ),
                       ),
-                    child: TextField(
-                      controller: passwordController,
-                      cursorColor: c.preto,
-                      obscureText: true,
-                      decoration: const InputDecoration(
-                        labelStyle: TextStyle(color: c.preto),
-                        icon: Icon(Icons.lock),
-                        label: Text("Palavra-passe"),
-                        border: InputBorder.none,
-                        filled: false,
                       ),
                     ),
+                  ],
+                ),
+                const SizedBox(height: 10,),
+                GestureDetector(
+                  onTap: ()=>loginFunction(context),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    padding: const EdgeInsets.all(10),
+                    margin: const EdgeInsets.only(left: 40, right: 40),
+                    decoration: BoxDecoration(
+                      color: c.verde_1,
+                      borderRadius: BorderRadius.circular(10)
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10,),
-              GestureDetector(
-                onTap: ()=>loginFunction(context),
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  padding: const EdgeInsets.all(10),
-                  margin: const EdgeInsets.only(left: 40, right: 40),
-                  decoration: BoxDecoration(
-                    color: c.verde_1,
-                    borderRadius: BorderRadius.circular(10)
-                  ),
-                  child: const Center(child: Text("Enviar", style: TextStyle(color: c.branco, fontWeight: FontWeight.bold, fontSize: 15),),),
-                  )
-              )
-            ],
+                    child: const Center(child: Text("Enviar", style: TextStyle(color: c.branco, fontWeight: FontWeight.bold, fontSize: 15),),),
+                    )
+                )
+              ],
+            ),
           )
         ),
       ),
