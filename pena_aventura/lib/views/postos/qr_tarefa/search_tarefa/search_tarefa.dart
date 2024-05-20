@@ -62,7 +62,7 @@ class _SearchTarefaState extends State<SearchTarefa> {
                     Container(
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height / 3,
-                      color: c.cinza, // Cor de fondo del contenedor
+                      color: c.cinza, // Cor de fondo do contentor
                       child: Image.network("https://packs.lifecooler.com/wondermedias/sys_master/productmedias/h6b/hbe/661534-560x373.jpg", fit: BoxFit.cover,),
                     ),
                     // Contentor com detalhes da atividade
