@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:PenaAventura/views/cores/cor.dart';
 import 'package:PenaAventura/views/postos/qr_tarefa/qr_scanner.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -71,7 +70,7 @@ Future<List<dynamic>> _getData() async {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       color: snap[index]['estado'] == 0
-                              ? Colors.grey
+                              ?Colors.grey
                               :c.azul_1,
     
                     ),
@@ -81,7 +80,12 @@ Future<List<dynamic>> _getData() async {
                     child: Column(
                       children: [
                         ClipRRect(borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5)), child: Image.network("https://packs.lifecooler.com/wondermedias/sys_master/productmedias/h6b/hbe/661534-560x373.jpg")),
-                        Container(margin: const EdgeInsets.only(left: 20, right: 20), child: Text(snap[index]['tarefa_nome'], style: const TextStyle(color: c.branco, fontSize: 18),)),
+                        Container(margin: const EdgeInsets.only(left: 20, right: 20), child: Text(snap[index]['tarefa_nome'], style: TextStyle(
+                                                                                                                                          color: snap[index]['estado']==0
+                                                                                                                                                         ?c.preto
+                                                                                                                                                         :c.branco,
+                                                                                                                                          fontSize: 18
+                                                                                                                                          ),)),
                       ],
                     ),
                   ),
