@@ -176,7 +176,6 @@ class _PerfilState extends State<Perfil> {
     int id = prefs.getInt('id') ?? 0;
 
     var url = Uri.parse('https://lavandaria.oxb.pt/index.php/get_perfil_app');
-    //var url = Uri.parse('http://10.0.0.53/xampp/project_oxb/project1/lib/pages/db/perfil_db/perfil.php');
     var response = await http.post(url, body: {'id_utilizador': id.toString()});
 
     if (response.statusCode == 200) {
