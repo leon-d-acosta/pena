@@ -62,10 +62,8 @@ class _SearchTarefaState extends State<SearchTarefa> {
                     Container(
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height / 3,
-                      color: Colors.amber, // Cor de fondo del contenedor
-                      child: Center(
-                        child: Text(task['tarefa_nome']), // Nome da atividade
-                      ),
+                      color: c.cinza, // Cor de fondo del contenedor
+                      child: Image.network("https://packs.lifecooler.com/wondermedias/sys_master/productmedias/h6b/hbe/661534-560x373.jpg", fit: BoxFit.cover,),
                     ),
                     // Contentor com detalhes da atividade
                     Container(

@@ -81,7 +81,7 @@ Future<List<dynamic>> _getData() async {
                     child: Column(
                       children: [
                         ClipRRect(borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5)), child: Image.network("https://packs.lifecooler.com/wondermedias/sys_master/productmedias/h6b/hbe/661534-560x373.jpg")),
-                        Container(margin: const EdgeInsets.only(left: 20, right: 20), child: Text("Comboio de montanha", style: const TextStyle(color: c.branco, fontSize: 18),)),
+                        Container(margin: const EdgeInsets.only(left: 20, right: 20), child: Text(snap[index]['tarefa_nome'], style: const TextStyle(color: c.branco, fontSize: 18),)),
                       ],
                     ),
                   ),
