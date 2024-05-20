@@ -7,8 +7,8 @@ import 'package:PenaAventura/views/cores/cor.dart';
 final TextEditingController idController = TextEditingController();
 
 class Qr_Scanner extends StatefulWidget {
-  final String nome_atividade;
-  const Qr_Scanner({Key? key, required this.nome_atividade}) : super(key: key);
+  final String id_posto;
+  const Qr_Scanner({Key? key, required this.id_posto}) : super(key: key);
 
   @override
   State<Qr_Scanner> createState() => _Qr_ScannerState();
@@ -95,7 +95,7 @@ class _Qr_ScannerState extends State<Qr_Scanner> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => SearchTarefa(nome_atividade: widget.nome_atividade,),
+                                  builder: (context) => SearchTarefa(nome_atividade: widget.id_posto,),
                                 ),
                               ).then((value) {
                                 setState(() {

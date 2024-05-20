@@ -65,7 +65,7 @@ Future<List<dynamic>> _getData() async {
               ), 
               itemBuilder: (context, index) {
                 return GestureDetector(
-                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Qr_Scanner(nome_atividade: snap[index]['tarefa_nome'],))),
+                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Qr_Scanner(id_posto: snap[index]['id_posto'],))),
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
