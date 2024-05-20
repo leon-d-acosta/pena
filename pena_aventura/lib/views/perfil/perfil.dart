@@ -52,6 +52,8 @@ class _PerfilState extends State<Perfil> {
   void _logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('id');
+    await prefs.remove('email');
+    await prefs.remove('palavra-passe');
 
     Navigator.pushAndRemoveUntil(
       context,
@@ -178,7 +180,6 @@ class _PerfilState extends State<Perfil> {
     var response = await http.post(url, body: {'id_utilizador': id.toString()});
 
     if (response.statusCode == 200) {
-      print("asdasdadada");
       return json.decode(response.body);
     } else {
       throw Exception('Error al obtener los datos');

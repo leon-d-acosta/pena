@@ -6,11 +6,38 @@ import 'package:flutter/material.dart'; // Importa el paquete Flutter para const
 import 'package:shared_preferences/shared_preferences.dart'; // Importa el paquete para el manejo de preferencias compartidas.
 import 'package:http/http.dart' as http; // Importa el paquete HTTP para realizar solicitudes a la web.
 
-class Login extends StatelessWidget { // Define una clase de widget sin estado llamada 'Login'.
-   Login({super.key}); // Constructor de la clase 'Login' con una clave opcional.
+class Login extends StatefulWidget { // Define una clase de widget sin estado llamada 'Login'.
+   Login({super.key}); 
+  @override
+  State<Login> createState() => _LoginState();
+}
 
-  final TextEditingController emailController = TextEditingController(); // Controlador para el campo de texto del email.
-  final TextEditingController passwordController = TextEditingController(); // Controlador para el campo de texto de la contraseña.
+class _LoginState extends State<Login> { // Constructor de la clase 'Login' con una clave opcional.
+  TextEditingController emailController = TextEditingController(); // Controlador para el campo de texto del email.
+  TextEditingController passwordController = TextEditingController();  // Controlador para el campo de texto de la contraseña.
+  String? email, palavra_passe;
+
+  @override
+  void initState() {
+    super.initState();
+    RememberMe();
+  }
+
+  RememberMe() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    email = prefs.getString('email');
+    palavra_passe = prefs.getString('palavra-passe');
+    if (email != null && palavra_passe != null) {
+      setState(() {
+        emailController.text = email!;
+        passwordController.text = palavra_passe!;
+      });
+      loginFunction(context);
+    }
+    else{
+      print("Sin mail ni passe");
+    }
+  }
 
   Future<void> loginFunction(BuildContext context) async { // Define una función asíncrona para manejar el inicio de sesión.
     if (emailController.text.isEmpty || passwordController.text.isEmpty) { // Verifica si los campos de texto están vacíos.
@@ -28,12 +55,12 @@ class Login extends StatelessWidget { // Define una clase de widget sin estado l
 
     var url = Uri.parse('https://lavandaria.oxb.pt/index.php/login_entrar'); // Define la URL de la solicitud de inicio de sesión.
     final response = await http.post( // Realiza una solicitud POST a la URL.
-      url,
-      body: {
-        'email': emailController.text, // Pasa el email como parte del cuerpo de la solicitud.
-        'password': passwordController.text, // Pasa la contraseña como parte del cuerpo de la solicitud.
-      },
-    );
+        url,
+        body: {
+          'email': emailController.text, // Pasa el email como parte del cuerpo de la solicitud.
+          'password': passwordController.text, // Pasa la contraseña como parte del cuerpo de la solicitud.
+        },
+      );
     
     if (response.statusCode == 200) { // Verifica si la solicitud fue exitosa.
       var decodedData;
@@ -47,6 +74,8 @@ class Login extends StatelessWidget { // Define una clase de widget sin estado l
         if (decodedData['status']=='success' || decodedData['status'] == true) { // Verifica si el estado es 'success'.
           SharedPreferences prefs = await SharedPreferences.getInstance(); // Obtiene una instancia de preferencias compartidas.
           prefs.setInt('id', int.parse(decodedData['utilizador']['id'])); // Guarda el ID del usuario en las preferencias compartidas.
+          prefs.setString('email', emailController.text);
+          prefs.setString('palavra-passe', passwordController.text);
           Navigator.push( // Navega a la página de inicio.
             context,
             MaterialPageRoute(builder: (context) => const HomePage()),
@@ -121,13 +150,14 @@ class Login extends StatelessWidget { // Define una clase de widget sin estado l
                         controller: emailController, // Asigna el controlador del email.
                         cursorColor: c.preto, // Establece el color del cursor.
                         obscureText: false, // El texto no es oculto.
-                        decoration: const InputDecoration( // Aplica decoraciones al campo de texto.
+                        decoration:  InputDecoration( // Aplica decoraciones al campo de texto.
                           labelStyle: TextStyle(color: c.preto), // Establece el estilo del texto de la etiqueta.
                           icon: Icon(Icons.person), // Añade un ícono al campo de texto.
                           label: Text("Correo eletrónico"), // Añade una etiqueta al campo de texto.
                           border: InputBorder.none, // Sin borde.
                           filled: false, // El campo no está lleno.
                         ),
+                        
                       ),
                       ),
                     ),
@@ -189,12 +219,13 @@ class Login extends StatelessWidget { // Define una clase de widget sin estado l
                         )
                       ),
                     )
-                )
+                ),
               ],
             ),
           )
         ),
       ),
     );
-  } 
+  }
+
 }
