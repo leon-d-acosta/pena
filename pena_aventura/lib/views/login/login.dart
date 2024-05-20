@@ -1,184 +1,183 @@
-import 'dart:convert';
+import 'dart:convert'; // Importa la librería 'dart:convert' para la manipulación de datos JSON.
 
-import 'package:PenaAventura/views/cores/cor.dart';
-import 'package:PenaAventura/views/navbar/homepage.dart';
-import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
+import 'package:PenaAventura/views/cores/cor.dart'; // Importa un archivo local con colores personalizados.
+import 'package:PenaAventura/views/navbar/homepage.dart'; // Importa la página de inicio.
+import 'package:flutter/material.dart'; // Importa el paquete Flutter para construir la interfaz de usuario.
+import 'package:shared_preferences/shared_preferences.dart'; // Importa el paquete para el manejo de preferencias compartidas.
+import 'package:http/http.dart' as http; // Importa el paquete HTTP para realizar solicitudes a la web.
 
+class Login extends StatelessWidget { // Define una clase de widget sin estado llamada 'Login'.
+   Login({super.key}); // Constructor de la clase 'Login' con una clave opcional.
 
-class Login extends StatelessWidget {
-   Login({super.key});
+  final TextEditingController emailController = TextEditingController(); // Controlador para el campo de texto del email.
+  final TextEditingController passwordController = TextEditingController(); // Controlador para el campo de texto de la contraseña.
 
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-
-  Future<void> loginFunction(BuildContext context) async {
-    if (emailController.text.isEmpty || passwordController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+  Future<void> loginFunction(BuildContext context) async { // Define una función asíncrona para manejar el inicio de sesión.
+    if (emailController.text.isEmpty || passwordController.text.isEmpty) { // Verifica si los campos de texto están vacíos.
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar( // Muestra un mensaje de error si los campos están vacíos.
         content: Text('Datos insuficientes'),
       ));
-      return;
+      return; // Sale de la función si hay datos insuficientes.
     }
 
-    var url = Uri.parse('https://lavandaria.oxb.pt/index.php/login_entrar');
-    final response = await http.post(
+    var url = Uri.parse('https://lavandaria.oxb.pt/index.php/login_entrar'); // Define la URL de la solicitud de inicio de sesión.
+    final response = await http.post( // Realiza una solicitud POST a la URL.
       url,
       body: {
-        'email': emailController.text,
-        'password': passwordController.text,
+        'email': emailController.text, // Pasa el email como parte del cuerpo de la solicitud.
+        'password': passwordController.text, // Pasa la contraseña como parte del cuerpo de la solicitud.
       },
     );
     
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200) { // Verifica si la solicitud fue exitosa.
       var decodedData;
       try {
-        decodedData = json.decode(response.body);
+        decodedData = json.decode(response.body); // Intenta decodificar la respuesta JSON.
       } catch (e) {
-        print('Error al decodificar la respuesta del servidor: $e');
+        print('Error al decodificar la respuesta del servidor: $e'); // Imprime un mensaje de error si falla la decodificación.
       }
 
-      if (decodedData != null && decodedData['status'] != null) {
-        if (decodedData['status']=='success' || decodedData['status'] == true) {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          prefs.setInt('id', int.parse(decodedData['utilizador']['id']));
-          Navigator.push(
+      if (decodedData != null && decodedData['status'] != null) { // Verifica si los datos decodificados y el estado no son nulos.
+        if (decodedData['status']=='success' || decodedData['status'] == true) { // Verifica si el estado es 'success'.
+          SharedPreferences prefs = await SharedPreferences.getInstance(); // Obtiene una instancia de preferencias compartidas.
+          prefs.setInt('id', int.parse(decodedData['utilizador']['id'])); // Guarda el ID del usuario en las preferencias compartidas.
+          Navigator.push( // Navega a la página de inicio.
             context,
             MaterialPageRoute(builder: (context) => const HomePage()),
           );
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar( // Muestra un mensaje de error si el inicio de sesión falla.
             content: Text(decodedData['status_message'] ?? 'Error desconocido'),
           ));
         }
       } else {
-        print("aqui rompe");
+        print("aqui rompe"); // Imprime un mensaje si los datos decodificados son nulos o no contienen un estado.
       }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar( // Muestra un mensaje de error si la solicitud no fue exitosa.
         content: Text('Error de conexión: ${response.statusCode} - ${response.reasonPhrase}'),
       ));
-      print('Error de conexión: ${response.statusCode} - ${response.reasonPhrase}');
+      print('Error de conexión: ${response.statusCode} - ${response.reasonPhrase}'); // Imprime detalles del error de conexión.
     }
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        color: c.preto.withOpacity(0.6),
-        child:  Center(
-          child: Container(
-            height: MediaQuery.of(context).orientation == Orientation.portrait
+  Widget build(BuildContext context) { // Define el método de construcción del widget.
+    return Scaffold( // Retorna un widget Scaffold, que proporciona la estructura básica de la interfaz de usuario.
+      body: Container( // Crea un contenedor para el cuerpo del Scaffold.
+        color: c.preto.withOpacity(0.6), // Establece el color de fondo del contenedor con una opacidad del 60%.
+        child:  Center( // Centra el contenido del contenedor.
+          child: Container( // Crea un contenedor para el formulario de inicio de sesión.
+            height: MediaQuery.of(context).orientation == Orientation.portrait // Establece la altura del contenedor en función de la orientación.
                                                 ? MediaQuery.of(context).size.height/1.5
                                                 : MediaQuery.of(context).size.height/1.1,
-            width: MediaQuery.of(context).size.width/1.1,
-            decoration: BoxDecoration(
-              color: c.cinza,
-              borderRadius: BorderRadius.circular(10),
+            width: MediaQuery.of(context).size.width/1.1, // Establece el ancho del contenedor.
+            decoration: BoxDecoration( // Aplica decoraciones al contenedor.
+              color: c.cinza, // Establece el color de fondo.
+              borderRadius: BorderRadius.circular(10), // Redondea las esquinas.
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
+            child: Column( // Crea una columna para organizar los elementos verticalmente.
+              mainAxisAlignment: MainAxisAlignment.center, // Centra los elementos verticalmente.
+              crossAxisAlignment: CrossAxisAlignment.center, // Centra los elementos horizontalmente.
               children: [
-                 Icon(Icons.account_circle_rounded, color: c.azul_1, size: MediaQuery.of(context).orientation==Orientation.portrait
+                 Icon(Icons.account_circle_rounded, color: c.azul_1, size: MediaQuery.of(context).orientation==Orientation.portrait // Muestra un ícono de cuenta.
                                                                                                                 ?150
                                                                                                                 :60,),
-                 Text("INICIAR SESSÃO", style: TextStyle(color: c.azul_1, fontSize: 20, fontWeight: FontWeight.bold),),
-                const SizedBox(height: 10,),
-                Column(
+                 Text("INICIAR SESSÃO", style: TextStyle(color: c.azul_1, fontSize: 20, fontWeight: FontWeight.bold),), // Muestra un texto de inicio de sesión.
+                const SizedBox(height: 10,), // Añade un espacio vertical de 10 píxeles.
+                Column( // Crea otra columna para los campos de texto.
                   children: [
-                    Container(
-                      padding: const EdgeInsets.all(5),
-                      margin: const EdgeInsets.only(left: 25, right: 25),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        borderRadius: BorderRadius.circular(10)
+                    Container( // Crea un contenedor para el campo de texto del email.
+                      padding: const EdgeInsets.all(5), // Añade padding al contenedor.
+                      margin: const EdgeInsets.only(left: 25, right: 25), // Añade margen a los lados.
+                      decoration: BoxDecoration( // Aplica decoraciones al contenedor.
+                        color: Colors.grey[200], // Establece el color de fondo.
+                        borderRadius: BorderRadius.circular(10) // Redondea las esquinas.
                       ),
-                      child: Theme(
-                        data: Theme.of(context).copyWith(
-                          primaryColor: c.azul_1,
-                          inputDecorationTheme: Theme.of(context).inputDecorationTheme.copyWith(
-                            iconColor: MaterialStateColor.resolveWith((Set<MaterialState> states) {
+                      child: Theme( // Aplica un tema personalizado al campo de texto.
+                        data: Theme.of(context).copyWith( // Copia el tema actual y aplica modificaciones.
+                          primaryColor: c.azul_1, // Establece el color primario.
+                          inputDecorationTheme: Theme.of(context).inputDecorationTheme.copyWith( // Copia el tema de decoración de entradas y aplica modificaciones.
+                            iconColor: MaterialStateColor.resolveWith((Set<MaterialState> states) { // Configura el color del ícono en función del estado.
                               if (states.contains(MaterialState.focused)) {
-                                return c.azul_1;
+                                return c.azul_1; // Color cuando el campo está enfocado.
                               }
                               if (states.contains(MaterialState.error)) {
-                                return c.azul_1;
+                                return c.azul_1; // Color cuando hay un error.
                               }
-                              return Colors.grey;
+                              return Colors.grey; // Color por defecto.
                             }),
                           ),
                         ),
-                      child: TextField(
-                        controller: emailController,
-                        cursorColor: c.preto,
-                        obscureText: false,
-                        decoration: const InputDecoration(
-                          labelStyle: TextStyle(color: c.preto),
-                          icon: Icon(Icons.person),
-                          label: Text("Correo eletrónico"),
-                          border: InputBorder.none,
-                          filled: false,
+                      child: TextField( // Crea un campo de texto.
+                        controller: emailController, // Asigna el controlador del email.
+                        cursorColor: c.preto, // Establece el color del cursor.
+                        obscureText: false, // El texto no es oculto.
+                        decoration: const InputDecoration( // Aplica decoraciones al campo de texto.
+                          labelStyle: TextStyle(color: c.preto), // Establece el estilo del texto de la etiqueta.
+                          icon: Icon(Icons.person), // Añade un ícono al campo de texto.
+                          label: Text("Correo eletrónico"), // Añade una etiqueta al campo de texto.
+                          border: InputBorder.none, // Sin borde.
+                          filled: false, // El campo no está lleno.
                         ),
                       ),
                       ),
                     ),
-                    const SizedBox(height: 10,),
-                    Container(
-                      padding: const EdgeInsets.all(5),
-                      margin: const EdgeInsets.only(left: 25, right: 25),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        borderRadius: BorderRadius.circular(10)
+                    const SizedBox(height: 10,), // Añade un espacio vertical de 10 píxeles.
+                    Container( // Crea un contenedor para el campo de texto de la contraseña.
+                      padding: const EdgeInsets.all(5), // Añade padding al contenedor.
+                      margin: const EdgeInsets.only(left: 25, right: 25), // Añade margen a los lados.
+                      decoration: BoxDecoration( // Aplica decoraciones al contenedor.
+                        color: Colors.grey[200], // Establece el color de fondo.
+                        borderRadius: BorderRadius.circular(10) // Redondea las esquinas.
                       ),
-                      child: Theme(
-                        data: Theme.of(context).copyWith(
-                          primaryColor: c.azul_1,
-                          inputDecorationTheme: Theme.of(context).inputDecorationTheme.copyWith(
-                            iconColor: MaterialStateColor.resolveWith((Set<MaterialState> states) {
+                      child: Theme( // Aplica un tema personalizado al campo de texto.
+                        data: Theme.of(context).copyWith( // Copia el tema actual y aplica modificaciones.
+                          primaryColor: c.azul_1, // Establece el color primario.
+                          inputDecorationTheme: Theme.of(context).inputDecorationTheme.copyWith( // Copia el tema de decoración de entradas y aplica modificaciones.
+                            iconColor: MaterialStateColor.resolveWith((Set<MaterialState> states) { // Configura el color del ícono en función del estado.
                               if (states.contains(MaterialState.focused)) {
-                                return c.azul_1;
+                                return c.azul_1; // Color cuando el campo está enfocado.
                               }
                               if (states.contains(MaterialState.error)) {
-                                return c.azul_1;
+                                return c.azul_1; // Color cuando hay un error.
                               }
-                              return Colors.grey;
+                              return Colors.grey; // Color por defecto.
                             }),
                           ),
                         ),
-                      child: TextField(
-                        controller: passwordController,
-                        cursorColor: c.preto,
-                        obscureText: true,
-                        decoration: const InputDecoration(
-                          labelStyle: TextStyle(color: c.preto),
-                          icon: Icon(Icons.lock),
-                          label: Text("Palavra-passe"),
-                          border: InputBorder.none,
-                          filled: false,
+                      child: TextField( // Crea un campo de texto.
+                        controller: passwordController, // Asigna el controlador de la contraseña.
+                        cursorColor: c.preto, // Establece el color del cursor.
+                        obscureText: true, // El texto es oculto.
+                        decoration: const InputDecoration( // Aplica decoraciones al campo de texto.
+                          labelStyle: TextStyle(color: c.preto), // Establece el estilo del texto de la etiqueta.
+                          icon: Icon(Icons.lock), // Añade un ícono al campo de texto.
+                          label: Text("Palavra-passe"), // Añade una etiqueta al campo de texto.
+                          border: InputBorder.none, // Sin borde.
+                          filled: false, // El campo no está lleno.
                         ),
                       ),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 10,),
-                GestureDetector(
-                  onTap: ()=>loginFunction(context),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    padding: const EdgeInsets.all(10),
-                    margin: const EdgeInsets.only(left: 25, right: 25),
-                    decoration: BoxDecoration(
-                      color: c.verde_1,
-                      borderRadius: BorderRadius.circular(10)
+                const SizedBox(height: 10,), // Añade un espacio vertical de 10 píxeles.
+                GestureDetector( // Crea un detector de gestos.
+                  onTap: ()=>loginFunction(context), // Llama a la función de inicio de sesión cuando se toca.
+                  child: Container( // Crea un contenedor para el botón de inicio de sesión.
+                    width: MediaQuery.of(context).size.width, // Establece el ancho del contenedor.
+                    padding: const EdgeInsets.all(10), // Añade padding al contenedor.
+                    margin: const EdgeInsets.only(left: 25, right: 25), // Añade margen a los lados.
+                    decoration: BoxDecoration( // Aplica decoraciones al contenedor.
+                      color: c.verde_1, // Establece el color de fondo.
+                      borderRadius: BorderRadius.circular(10) // Redondea las esquinas.
                     ),
-                    child: const Center(
-                      child: Text("Iniciar sessão", style: TextStyle(
-                        color: c.branco, 
-                        fontWeight: FontWeight.bold, 
-                        fontSize: 15)
+                    child: const Center( // Centra el contenido del contenedor.
+                      child: Text("Iniciar sessão", style: TextStyle( // Añade un texto al botón de inicio de sesión.
+                        color: c.branco, // Establece el color del texto.
+                        fontWeight: FontWeight.bold, // Establece el peso del texto.
+                        fontSize: 15) // Establece el tamaño del texto.
                         )
                       ),
                     )
