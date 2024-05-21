@@ -69,16 +69,17 @@ Future<List<dynamic>> _getData() async {
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
-                      color: c.azul_1,
+                      color: Colors.grey[600],
     
                     ),
                     width: MediaQuery.of(context).orientation == Orientation.portrait
                         ? MediaQuery.of(context).size.width * 0.5 - 15 
                         : MediaQuery.of(context).size.width * 0.25 - 15,
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Container(height: MediaQuery.of(context).size.height/8, child: ClipRRect(borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5)), child: Image.network(snap[index]['foto'], fit: BoxFit.fill,))),
-                        Container(margin: const EdgeInsets.only(left: 20, right: 20), child: Text(snap[index]['nome'], style: TextStyle(color: c.branco, fontSize: 16 ),)),
+                        Container(height: MediaQuery.of(context).size.height/6, child: ClipRRect(borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5)), child: Image.network(snap[index]['foto'], fit: BoxFit.cover,))),
+                        Container(margin: const EdgeInsets.only(left: 20, right: 20), child: Center(child: Text(snap[index]['nome'], style: TextStyle(color: c.branco, fontSize: 15 ),))),
                       ],
                     ),
                   ),

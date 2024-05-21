@@ -46,14 +46,13 @@ class _Qr_ScannerState extends State<Qr_Scanner> {
               child: Column(
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(30),
-                    height: constraints.maxHeight / 3.5,
+                    padding: const EdgeInsets.all(10),
+                    height: MediaQuery.of(context).size.height / 5,
                     width: constraints.maxWidth,
                     color: c.cinza,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        //const Text("Pesquisar por", style: TextStyle(color: c.preto, fontSize: 20)),
                         const Text("QRCODE", style: TextStyle(color: c.verde_1, fontSize: 30, fontWeight: FontWeight.bold)),
                         Container(
                           padding: const EdgeInsets.only(left: 10),
@@ -63,7 +62,16 @@ class _Qr_ScannerState extends State<Qr_Scanner> {
                         ),
                         const SizedBox(height: 10),
                         GestureDetector(
-                          onTap: () => print(idController.text),
+                          onTap: () {
+                            if(idController.text.isNotEmpty) {
+                            Navigator.push(
+                              context, 
+                              MaterialPageRoute(
+                                builder: (context)=>SearchTarefa(id_posto: widget.id_posto, qr: idController.text)
+                              )
+                            ).then((_) => idController.clear());
+                            }
+                          },
                           child: Container(
                             width: constraints.maxWidth,
                             decoration: BoxDecoration(
@@ -96,7 +104,6 @@ class _Qr_ScannerState extends State<Qr_Scanner> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => SearchTarefa(id_posto: widget.id_posto, qr: barcodes[0].rawValue.toString()),
-                                 // builder: (context) => SearchTarefa(),
                                 ),
                               ).then((value) {
                                 setState(() {
