@@ -45,7 +45,7 @@ Future<List<dynamic>> _getData() async {
     return Scaffold(
       backgroundColor: c.cinza,
       body: Padding(
-        padding: const EdgeInsets.all(40),
+        padding: const EdgeInsets.all(10),
         child: FutureBuilder(
           future: _futureData,
           builder: (BuildContext context, AsyncSnapshot snapshot){

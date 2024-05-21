@@ -96,6 +96,7 @@ class _Qr_ScannerState extends State<Qr_Scanner> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => SearchTarefa(id_posto: widget.id_posto, qr: barcodes[0].rawValue.toString()),
+                                 // builder: (context) => SearchTarefa(),
                                 ),
                               ).then((value) {
                                 setState(() {
