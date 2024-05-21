@@ -53,7 +53,7 @@ class _Qr_ScannerState extends State<Qr_Scanner> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text("QRCODE", style: TextStyle(color: c.verde_1, fontSize: 30, fontWeight: FontWeight.bold)),
+                        const Text("QRCODE", style: TextStyle(color: c.verde_2, fontSize: 30, fontWeight: FontWeight.bold)),
                         Container(
                           padding: const EdgeInsets.only(left: 10),
                           child: TextField(
@@ -75,7 +75,7 @@ class _Qr_ScannerState extends State<Qr_Scanner> {
                           child: Container(
                             width: constraints.maxWidth,
                             decoration: BoxDecoration(
-                              color: c.verde_1,
+                              color: c.verde_2,
                               borderRadius: BorderRadius.circular(5),
                             ),
                             padding: const EdgeInsets.all(10),

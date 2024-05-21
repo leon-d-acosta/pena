@@ -45,7 +45,7 @@ class _SearchTarefaState extends State<SearchTarefa> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: c.cinza,
+      backgroundColor: c.branco,
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
@@ -133,7 +133,7 @@ class _ListTileItemState extends State<ListTileItem> {
         children: [
           if (widget.data['foto'].isNotEmpty)
             Container(
-              height: MediaQuery.of(context).size.height / 3,
+              height: MediaQuery.of(context).size.height / 4.75,
               width: double.infinity,
               color: c.cinza, // Replace c.cinza with Colors.grey if necessary
               child: Image.network(widget.data['foto'], fit: BoxFit.cover),
@@ -146,16 +146,17 @@ class _ListTileItemState extends State<ListTileItem> {
                 Text(widget.data['nome_produto'], style: TextStyle(color: c.preto, fontWeight: FontWeight.bold, fontSize: 18)),
                 Text(widget.data['nome_produto_principal'], style: TextStyle(color: c.preto, fontSize: 15)),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text("Data", style: TextStyle(color: c.laranja, fontSize: 20, fontWeight: FontWeight.bold)),
                         Text(widget.data['data_atividade'], style: TextStyle(color: c.preto, fontSize: 15)),
                       ],
                     ),
                     Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(widget.data['nome_sessao'], style: TextStyle(color: c.laranja, fontSize: 20, fontWeight: FontWeight.bold)),
                         Text("${widget.data['hora']}H", style: TextStyle(color: c.preto, fontSize: 15)),
@@ -193,11 +194,11 @@ class _ListTileItemState extends State<ListTileItem> {
                       children: [
                         Container(
                           padding: const EdgeInsets.only(bottom: 10),
-                          child: Text("Compradas: ${widget.data['quantidade']}", style: TextStyle(fontSize: 15, color: c.preto)),
+                          child: Text("Compradas: ${widget.data['quantidade']}", style: TextStyle(fontSize: 16, color: c.preto)),
                         ),
                         Container(
                           padding: const EdgeInsets.only(bottom: 10),
-                          child: Text("Concluidas: ${widget.data['utilizada']}", style: TextStyle(fontSize: 15, color: c.preto)),
+                          child: Text("Concluidas: ${widget.data['utilizada']}", style: TextStyle(fontSize: 16, color: c.preto)),
                         ),
                       ],
                     ),
@@ -206,11 +207,11 @@ class _ListTileItemState extends State<ListTileItem> {
                       children: [
                         Container(
                           padding: const EdgeInsets.only(bottom: 10),
-                          child: Text("Anuladas: ${widget.data['anuladas']}", style: TextStyle(fontSize: 15, color: c.preto)),
+                          child: Text("Anuladas: ${widget.data['anuladas']}", style: TextStyle(fontSize: 16, color: c.preto)),
                         ),
                         Container(
                           padding: const EdgeInsets.only(bottom: 10),
-                          child: Text("Não concluidas: ${widget.data['nao_concluidas']}", style: TextStyle(fontSize: 15, color: c.preto)),
+                          child: Text("Não concluidas: ${widget.data['nao_concluidas']}", style: TextStyle(fontSize: 16, color: c.preto)),
                         ),
                       ],
                     ),
@@ -220,8 +221,7 @@ class _ListTileItemState extends State<ListTileItem> {
                   visible: widget.data['nao_concluidas'] > 0,
                   child: Container(
                     decoration: BoxDecoration(
-                      color: c.preto.withOpacity(0.05),
-                      border: Border.all(color: c.preto, width: 0.5),
+                      color: c.azul_1.withOpacity(0.05),
                       borderRadius: BorderRadius.circular(5),
                     ),
                     height: MediaQuery.of(context).size.height / 15,
@@ -238,15 +238,15 @@ class _ListTileItemState extends State<ListTileItem> {
                           },
                           child: Container(
                             decoration: BoxDecoration(
-                              color: c.preto.withOpacity(0.2),
+                              color: c.azul_1.withOpacity(1),
                               borderRadius: BorderRadius.only(topLeft: Radius.circular(5), bottomLeft: Radius.circular(5)),
                             ),
                             width: MediaQuery.of(context).size.height / 15,
                             height: MediaQuery.of(context).size.height / 15,
-                            child: Icon(Icons.remove),
+                            child: Icon(Icons.remove, color: c.branco,),
                           ),
                         ),
-                        Text("$_itemCount"),
+                        Text("$_itemCount", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: c.azul_1),),
                         GestureDetector(
                           onTap: () {
                             if (widget.data['nao_concluidas'] > _itemCount) {
@@ -257,12 +257,12 @@ class _ListTileItemState extends State<ListTileItem> {
                           },
                           child: Container(
                             decoration: BoxDecoration(
-                              color: c.preto.withOpacity(0.2),
+                              color: c.azul_1.withOpacity(1),
                               borderRadius: BorderRadius.only(topRight: Radius.circular(5), bottomRight: Radius.circular(5)),
                             ),
                             width: MediaQuery.of(context).size.height / 15,
                             height: MediaQuery.of(context).size.height / 15,
-                            child: Icon(Icons.add),
+                            child: Icon(Icons.add, color: c.branco,),
                           ),
                         ),
                       ],
@@ -285,7 +285,7 @@ class _ListTileItemState extends State<ListTileItem> {
                               color: c.laranja,
                               borderRadius: BorderRadius.circular(5),
                             ),
-                            width: MediaQuery.of(context).size.width / 2.5,
+                            width: MediaQuery.of(context).size.width / 2.32,
                             height: MediaQuery.of(context).size.height / 15,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -310,10 +310,10 @@ class _ListTileItemState extends State<ListTileItem> {
                             },
                           child: Container(
                             decoration: BoxDecoration(
-                              color: c.azul_1,
+                              color: c.verde_1,
                               borderRadius: BorderRadius.circular(5),
                             ),
-                            width: MediaQuery.of(context).size.width / 2.5,
+                            width: MediaQuery.of(context).size.width / 2.32,
                             height: MediaQuery.of(context).size.height / 15,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -321,7 +321,7 @@ class _ListTileItemState extends State<ListTileItem> {
                                 Container(margin: const EdgeInsets.only(left: 20), child: Text("Registar", style: TextStyle(color: c.branco, fontWeight: FontWeight.bold, fontSize: 15))),
                                 Container(
                                   decoration: BoxDecoration(
-                                    color: c.azul_2,
+                                    color: c.verde_2,
                                     borderRadius: BorderRadius.only(topRight: Radius.circular(5), bottomRight: Radius.circular(5)),
                                   ),
                                   height: MediaQuery.of(context).size.height / 15,
@@ -370,7 +370,7 @@ class _ListTileItemState extends State<ListTileItem> {
                     ),
                   ),
                 ),
-                Divider(color: c.preto.withOpacity(0.2), height: 25),
+                //Divider(color: c.preto.withOpacity(0.2), height: 25),
               ],
             ),
           ),
