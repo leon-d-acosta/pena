@@ -10,4 +10,6 @@ class c{
   static const preto = Color.fromARGB(255, 0, 0, 0);
   static const branco = Color.fromARGB(255, 255, 255, 255);
   static final cinza = Colors.grey[350];
+  static final cinza_2 =  Color.fromRGBO(117, 117, 117, 1);
+
 }

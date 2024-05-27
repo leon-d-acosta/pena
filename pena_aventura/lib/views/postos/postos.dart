@@ -43,7 +43,7 @@ Future<List<dynamic>> _getData() async {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: c.cinza,
+      backgroundColor: c.branco,
       body: Padding(
         padding: const EdgeInsets.all(10),
         child: FutureBuilder(
@@ -69,7 +69,7 @@ Future<List<dynamic>> _getData() async {
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
-                      color: Colors.grey[600],
+                      color: c.cinza_2,
     
                     ),
                     width: MediaQuery.of(context).orientation == Orientation.portrait

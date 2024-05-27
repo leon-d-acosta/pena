@@ -67,7 +67,7 @@ class _PerfilState extends State<Perfil> {
     return Stack(
       children: [
         Container(
-          color: c.cinza,
+          color: c.branco,
           height: double.infinity,
           padding: const EdgeInsets.all(20),
           child: Column(

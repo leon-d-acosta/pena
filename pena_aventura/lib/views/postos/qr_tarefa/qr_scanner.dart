@@ -49,7 +49,7 @@ class _Qr_ScannerState extends State<Qr_Scanner> {
                     padding: const EdgeInsets.all(10),
                     height: MediaQuery.of(context).size.height / 5,
                     width: constraints.maxWidth,
-                    color: c.cinza,
+                    color: c.branco,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

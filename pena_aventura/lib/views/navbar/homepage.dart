@@ -1,4 +1,6 @@
+import 'package:PenaAventura/views/calendario/calendario.dart';
 import 'package:PenaAventura/views/cores/cor.dart';
+import 'package:PenaAventura/views/info_picagem/info_picagem.dart';
 import 'package:PenaAventura/views/perfil/perfil.dart';
 import 'package:PenaAventura/views/postos/postos.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
@@ -18,6 +20,8 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final views = [
       const Postos(),
+      const InfoPicagem(),
+      const Calendario(),
       const Perfil(),
     ];
 
@@ -25,7 +29,7 @@ class _HomePageState extends State<HomePage> {
       body: views[_selectedIndex],
       bottomNavigationBar: CurvedNavigationBar(
         buttonBackgroundColor:c.verde_2,
-        backgroundColor: c.cinza!,
+        backgroundColor: c.branco,
         color: c.azul_1,
         animationDuration: const Duration(milliseconds: 300),
         height: 60,
@@ -41,6 +45,16 @@ class _HomePageState extends State<HomePage> {
             color: c.branco, 
             size: 30,
             ),
+          Icon(
+            Icons.list_alt,
+            color: c.branco,
+            size: 30,
+          ),
+          Icon(
+            Icons.calendar_month_rounded,
+            color: c.branco,
+            size: 30,
+          ),
           Icon(
             Icons.account_circle, 
             color: c.branco, 
