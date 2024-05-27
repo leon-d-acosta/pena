@@ -1,6 +1,7 @@
 import 'dart:convert'; // Importa a biblioteca 'dart:convert' para lidar com codificação e decodificação de JSON
 import 'package:flutter/material.dart'; // Importa o pacote Flutter Material Design
 import 'package:PenaAventura/views/cores/cor.dart'; // Importa as cores do aplicativo
+import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // Importa a biblioteca para lidar com preferências compartilhadas
 import 'package:http/http.dart' as http; // Importa o pacote HTTP para fazer solicitações HTTP
 
@@ -12,21 +13,20 @@ class InfoPicagem extends StatefulWidget { // Classe para a tela de informaçõe
 }
 
 class _InfoPicagemState extends State<InfoPicagem> { // Estado da tela de informações
-  late Future<List<dynamic>> _futureData; // Futuro para armazenar os dados a serem exibidos
   TextEditingController dataInicioController = TextEditingController(); // Controlador para a data de início
   TextEditingController dataFimController = TextEditingController(); // Controlador para a data de término
-  List<bool> _isExpanded = []; // Lista para controlar a expansão dos painéis
+  ValueNotifier<List<bool>> _isExpanded = ValueNotifier<List<bool>>([]); // Lista para controlar a expansão dos painéis
+  String total = "0";
+  late Future<List<dynamic>> _futureData; // Declara uma variável para armazenar os dados futuros.
 
   @override
-  void initState() { // Método chamado ao inicializar o estado
-    super.initState(); // Chama o método initState da classe pai
-    _refreshView(); // Inicializa a visualização
+  void initState() {
+    super.initState();
+    _refreshView();
   }
 
-  void _refreshView() { // Método para atualizar a visualização
-    setState(() { // Atualiza o estado do widget
-      _futureData = _getData(); // Obtém os dados a serem exibidos
-    });
+  void _refreshView() {
+    _futureData = _getFilteredData();
   }
 
   Future<int?> _getid() async { // Método assíncrono para obter o ID do usuário
@@ -34,27 +34,19 @@ class _InfoPicagemState extends State<InfoPicagem> { // Estado da tela de inform
     return prefs.getInt('id'); // Retorna o ID armazenado localmente
   }
 
-  Future<List<dynamic>> _getFilteredData(dataInicio, dataFim) async { // Método para obter dados filtrados
+  Future<List<dynamic>> _getFilteredData() async { // Método para obter dados filtrados
     int id = (await _getid()) ?? 0; // Obtém o ID do usuário
 
-    var url = Uri.parse('https://adminpena.oxb.pt/index.php/getpostosapp'); // URL da API
-    var response = await http.post(url, body: {'id': id.toString()}); // Envia uma solicitação POST para a API
-
+    var url = Uri.parse('https://adminpena.oxb.pt/index.php/execucaoatividadesapp'); // URL da API
+    var response = await http.post(url, body: {
+      'id_utilizador': id.toString(),
+      'data_inicio': dataInicioController.text,
+      'data_fim': dataFimController.text,
+    }); // Envia uma solicitação POST para a API
+    print(response.body);
     if (response.statusCode == 200) { // Verifica se a solicitação foi bem-sucedida
-      return json.decode(response.body); // Decodifica a resposta do servidor
-    } else {
-      throw Exception('Erro ao obter os dados'); // Lança uma exceção em caso de erro na solicitação
-    }
-  }
-
-  Future<List<dynamic>> _getData() async { // Método para obter os dados
-    int id = (await _getid()) ?? 0; // Obtém o ID do usuário
-
-    var url = Uri.parse('https://adminpena.oxb.pt/index.php/getpostosapp'); // URL da API
-    var response = await http.post(url, body: {'id': id.toString()}); // Envia uma solicitação POST para a API
-
-    if (response.statusCode == 200) { // Verifica se a solicitação foi bem-sucedida
-      return json.decode(response.body); // Decodifica a resposta do servidor
+      total = json.decode(response.body)['total'];
+      return json.decode(response.body)['registos']; // Decodifica a resposta do servidor
     } else {
       throw Exception('Erro ao obter os dados'); // Lança uma exceção em caso de erro na solicitação
     }
@@ -65,7 +57,7 @@ class _InfoPicagemState extends State<InfoPicagem> { // Estado da tela de inform
       context: context, // Contexto do aplicativo
       builder: (BuildContext context) { // Construtor do widget da folha de fundo modal
         return FutureBuilder( // Constrói um widget com base em um futuro
-          future: _futureData, // Futuro para construir o widget
+          future: _getFilteredData(), // Futuro para construir o widget
           builder: (BuildContext context, AsyncSnapshot snapshot) { // Construtor do widget com base no snapshot do futuro
             if (snapshot.connectionState == ConnectionState.waiting) { // Verifica se a conexão está aguardando
               return const Center(child: CircularProgressIndicator()); // Retorna um indicador de progresso
@@ -74,7 +66,7 @@ class _InfoPicagemState extends State<InfoPicagem> { // Estado da tela de inform
               return Center(child: Text("${snapshot.error}")); // Retorna o erro
             }
             if (snapshot.data.isEmpty) { // Verifica se não há dados no snapshot
-              return const Center(child: Text("Não há informação")); // Retorna uma mensagem de que não há informações
+              //return const Center(child: Text("Não há informação")); // Retorna uma mensagem de que não há informações
             }
 
             return Container( // Widget de contêiner
@@ -85,12 +77,10 @@ class _InfoPicagemState extends State<InfoPicagem> { // Estado da tela de inform
                   ListTile( // Widget de lista
                     title: Text('Todos'), // Título da lista
                     onTap: () { // Função chamada ao tocar na lista
-                      _refreshView(); // Atualiza a visualização
+                      setState(() {}); // Atualiza a visualização
                       Navigator.pop(context); // Fecha a folha de fundo modal
                     },
                   ),
-                  // Os widgets TextField e GestureDetector estão comentados em espanhol
-                  // Para manter a consistência, deixei-os assim
                   Container(
                     padding: const EdgeInsets.all(5),
                     decoration: BoxDecoration(
@@ -134,13 +124,17 @@ class _InfoPicagemState extends State<InfoPicagem> { // Estado da tela de inform
                     ),
                   ),
                   GestureDetector( //botão para filtrar com as datas que insiriu o usuario
+                    onTap: () {
+                      _getFilteredData().then((value) => setState(() {}));
+                      Navigator.pop(context);
+                    },
                     child: Container(
                       height: MediaQuery.of(context).size.height/15,
                       decoration: BoxDecoration(
                         color: c.azul_1,
                         borderRadius: BorderRadius.circular(5)
                       ),
-                      child: Center(child: Text("Filtrar", style: TextStyle(color: c.branco),),),
+                      child: Center(child: Text("Filtrar", style: TextStyle(color: c.branco))),
                     ),
                   )
                 ],
@@ -158,7 +152,7 @@ class _InfoPicagemState extends State<InfoPicagem> { // Estado da tela de inform
       backgroundColor: c.branco, // Define a cor de fundo do Scaffold
       body: SafeArea( // Corpo seguro do Scaffold
         child: FutureBuilder( // Construtor de widget baseado em futuro
-          future: _futureData, // Futuro para construir o widget
+          future: _getFilteredData(), // Futuro para construir o widget
           builder: (BuildContext context, AsyncSnapshot snapshot) { // Construtor de widget com base no snapshot do futuro
             if (snapshot.connectionState == ConnectionState.waiting) { // Verifica se a conexão está aguardando
               return const Center(child: CircularProgressIndicator()); // Retorna um indicador de progresso
@@ -167,54 +161,123 @@ class _InfoPicagemState extends State<InfoPicagem> { // Estado da tela de inform
               return Center(child: Text("${snapshot.error}")); // Retorna o erro
             }
             if (snapshot.data.isEmpty) { // Verifica se não há dados no snapshot
-              return const Center(child: Text("Não há informação")); // Retorna uma mensagem de que não há informações
+              //return const Center(child: Text("Não há informação")); // Retorna uma mensagem de que não há informações
             }
+
             List<dynamic> snap = snapshot.data!; // Obtém os dados do snapshot
-            if (_isExpanded.length != snap.length) { // Verifica o comprimento da lista de expansão
-              _isExpanded = List<bool>.filled(snap.length, false); // Preenche a lista de expansão com valores falsos
+            if (_isExpanded.value.length != snap.length) { // Verifica o comprimento da lista de expansão
+              _isExpanded.value = List<bool>.filled(snap.length, false); // Preenche a lista de expansão com valores falsos
             }
-            
+
             return SingleChildScrollView( // Retorna um widget de rolagem
-              child: ExpansionPanelList( // Lista de painéis expansíveis
-                expandedHeaderPadding: const EdgeInsets.all(10), // Preenchimento do cabeçalho expandido
-                animationDuration: Duration(milliseconds: 200), // Duração da animação
-                elevation: 1, // Elevação dos painéis
-                materialGapSize: 5, // Tamanho do espaço entre os painéis
-                children: List.generate(snap.length, (index) { // Gera uma lista de widgets com base nos dados
-                  return ExpansionPanel( // Painel expansível
-                    backgroundColor: c.azul_2.withOpacity(0.3), // Cor de fundo do painel
-                    canTapOnHeader: true, // Permite tocar no cabeçalho do painel
-                    isExpanded: _isExpanded[index], // Define se o painel está expandido ou não
-                    headerBuilder: (context, isExpanded) => Padding( // Construtor de cabeçalho
-                      padding: const EdgeInsets.all(5.0), // Preenchimento do cabeçalho
-                      child: Column( // Coluna de widgets
-                        crossAxisAlignment: CrossAxisAlignment.start, // Alinhamento cruzado dos widgets
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(15),
+                      height: MediaQuery.of(context).size.height/6.5,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        color: c.azul_2.withOpacity(0.4),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row( // Linha de widgets
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween, // Alinhamento principal dos widgets
-                            children: [
-                              Text(snap[index]['nome']), // Exibe o nome do item
-                              Text("£ valor") // Exibe um valor estático
-                            ],
-                          ),
-                          Text("info") // Exibe informações estáticas
+                          Text("Total: "),
+                          Text("${total}€", style: TextStyle(fontSize: 40)),
                         ],
                       ),
                     ),
-                    body: Column( // Corpo do painel
-                      children: [
-                        Text("data 1"), // Exibe dados dinâmicos
-                        Text("data 2"), // Exibe dados dinâmicos
-                        Text("data 3"), // Exibe dados dinâmicos
-                      ],
+                    const SizedBox(height: 10),
+                    ValueListenableBuilder(
+                      valueListenable: _isExpanded,
+                      builder: (context, List<bool> isExpanded, _) {
+                        return ExpansionPanelList( // Lista de painéis expansíveis
+                          expandedHeaderPadding: const EdgeInsets.all(5), // Preenchimento do cabeçalho expandido
+                          animationDuration: Duration(milliseconds: 200), // Duração da animação
+                          elevation: 1, // Elevação dos painéis
+                          materialGapSize: 5, // Tamanho do espaço entre os painéis
+                          children: List.generate(snap.length, (index) { // Gera uma lista de widgets com base nos dados
+                            return ExpansionPanel( // Painel expansível
+                              backgroundColor: c.branco, // Cor de fundo do painel
+                              canTapOnHeader: true, // Permite tocar no cabeçalho do painel
+                              isExpanded: isExpanded[index], // Define se o painel está expandido ou não
+                              headerBuilder: (context, isExpanded) => Padding( // Construtor de cabeçalho
+                                padding: const EdgeInsets.all(5.0), // Preenchimento do cabeçalho
+                                child: Column( // Coluna de widgets
+                                  crossAxisAlignment: CrossAxisAlignment.start, // Alinhamento cruzado dos widgets
+                                  children: [
+                                    Row( // Linha de widgets
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween, // Alinhamento principal dos widgets
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            snap[index]['nome_produto'], 
+                                            overflow: TextOverflow.ellipsis,
+                                            softWrap: false,
+                                            maxLines: 2,
+                                            textScaler: TextScaler.linear(0.8),
+                                            ),
+                                        ), // Exibe o nome do item
+                                        Text("${snap[index]['quantidade_picada']} Qtd", style: TextStyle(fontWeight: FontWeight.bold),) // Exibe a quantidade picada
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(snap[index]['nome_posto']), // Exibe informações estáticas
+                                        Text("${snap[index]['total_parceiro'].toString()}€", style: TextStyle(color: c.azul_1),),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              body: Padding(
+                                padding: const EdgeInsets.only(left: 20.0),
+                                child: Column( // Corpo do painel
+                                  children: [
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                      children: [
+                                        Text("Monitor:", style: TextStyle(fontWeight: FontWeight.bold),),
+                                        Text("${snap[index]['nome_monitor']}"),
+                                      ],
+                                    ), // Exibe dados dinâmicos
+                                    Row(
+                                      children: [
+                                        Text("Monitor:", style: TextStyle(fontWeight: FontWeight.bold),),
+                                        Text("${snap[index]['cliente']}"),
+                                      ],
+                                    ), // Exibe dados dinâmicos
+                                    Row(
+                                      children: [
+                                        Text("Percentagem: ", style: TextStyle(fontWeight: FontWeight.bold),),
+                                        Text("${snap[index]['percentagem_parceiro']}%"),
+                                      ],
+                                    ), // Exibe dados dinâmicos
+                                    Row(
+                                      children: [
+                                        Text("Monitor:", style: TextStyle(fontWeight: FontWeight.bold),),
+                                        Text("${snap[index]['data_criacao']}"),
+                                      ],
+                                    ), // Exibe dados dinâmicos
+                                  ],
+                                ),
+                              ),
+                            );
+                          }),
+                          expansionCallback: (panelIndex, isExpanded) { // Função de retorno de chamada de expansão
+                            _isExpanded.value[panelIndex] = isExpanded; // Define o estado de expansão do painel
+                            _isExpanded.notifyListeners(); // Notifica os ouvintes sobre a alteração
+                          },
+                        );
+                      },
                     ),
-                  );
-                }),
-                expansionCallback: (panelIndex, isExpanded) { // Função de retorno de chamada de expansão
-                  setState(() { // Atualiza o estado do widget
-                    _isExpanded[panelIndex] = isExpanded; // Define o estado de expansão do painel
-                  });
-                },
+                  ],
+                ),
               ),
             );
           },
@@ -227,31 +290,30 @@ class _InfoPicagemState extends State<InfoPicagem> { // Estado da tela de inform
       ),
     );
   }
-  
+
   Future<void> dateInicioPicker() async { // Método assíncrono para selecionar a data de início
     DateTime? picked = await showDatePicker( // Exibe um seletor de data
-      context: context, 
+      context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime(2022), 
+      firstDate: DateTime(2022),
       lastDate: DateTime(2040)
     );
 
-    if(picked != null){ // Verifica se a data foi selecionada
+    if (picked != null) { // Verifica se a data foi selecionada
       dataInicioController.text = picked.toString().split(" ")[0]; // Define a data selecionada no controlador
-    };
+    }
   }
 
   Future<void> dateFimPicker() async { // Método assíncrono para selecionar a data de término
     DateTime? picked = await showDatePicker( // Exibe um seletor de data
-      context: context, 
+      context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime(2022), 
+      firstDate: DateTime(2022),
       lastDate: DateTime(2040)
     );
 
-    if(picked != null){ // Verifica se a data foi selecionada
+    if (picked != null) { // Verifica se a data foi selecionada
       dataFimController.text = picked.toString().split(" ")[0]; // Define a data selecionada no controlador
-    };
+    }
   }
 }
-
