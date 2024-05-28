@@ -44,6 +44,7 @@ dependencies:
   flutter_screenutil: ^5.9.1
   google_fonts: ^6.2.1
   table_calendar: ^3.1.1
+  internet_speed_test: ^1.5.0
 
 dev_dependencies:
   flutter_test:

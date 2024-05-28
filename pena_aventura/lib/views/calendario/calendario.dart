@@ -25,7 +25,7 @@ class _CalendarioState extends State<Calendario> {
           child: Column(
             children: [
               TableCalendar(
-
+                locale: 'pt_PT',
                 firstDay: DateTime.utc(2022, 1, 1),
                 lastDay: DateTime.utc(2030, 1, 1),
                 focusedDay: DateTime.now(),

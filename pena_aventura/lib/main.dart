@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:PenaAventura/views/navbar/homepage.dart';
 import 'package:PenaAventura/views/login/login.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 void main() async {
-  runApp(MyApp());
+  initializeDateFormatting().then((_) => runApp(MyApp()));
 }
-
 class MyApp extends StatelessWidget {
 
   const MyApp({Key? key}) : super(key: key);
