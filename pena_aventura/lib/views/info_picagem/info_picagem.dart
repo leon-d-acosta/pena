@@ -1,7 +1,6 @@
 import 'dart:convert'; // Importa a biblioteca 'dart:convert' para lidar com codificação e decodificação de JSON
 import 'package:flutter/material.dart'; // Importa o pacote Flutter Material Design
 import 'package:PenaAventura/views/cores/cor.dart'; // Importa as cores do aplicativo
-import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // Importa a biblioteca para lidar com preferências compartilhadas
 import 'package:http/http.dart' as http; // Importa o pacote HTTP para fazer solicitações HTTP
 
@@ -43,7 +42,6 @@ class _InfoPicagemState extends State<InfoPicagem> { // Estado da tela de inform
       'data_inicio': dataInicioController.text,
       'data_fim': dataFimController.text,
     }); // Envia uma solicitação POST para a API
-    print(response.body);
     if (response.statusCode == 200) { // Verifica se a solicitação foi bem-sucedida
       total = json.decode(response.body)['total'];
       return json.decode(response.body)['registos']; // Decodifica a resposta do servidor
@@ -314,6 +312,7 @@ class _InfoPicagemState extends State<InfoPicagem> { // Estado da tela de inform
 
     if (picked != null) { // Verifica se a data foi selecionada
       dataFimController.text = picked.toString().split(" ")[0]; // Define a data selecionada no controlador
+      print(dataFimController.text);
     }
   }
 }
