@@ -85,15 +85,8 @@ class _CalendarioState extends State<Calendario> { // Define o estado para o wid
   }
 
   List<Event> _getEventsForDay(DateTime day) { // Método para obter eventos de um dia específico.
-  List<Event> eventsForSelectedDay = [];
-  _events.forEach((key, value) {
-    if (key.year == day.year && key.month == day.month && key.day == day.day) {
-      eventsForSelectedDay.addAll(value);
-    }
-  });
-  print("Eventos para $day: $eventsForSelectedDay"); // Adiciona um log para verificar os eventos carregados para a data selecionada.
-  return eventsForSelectedDay; // Retorna os eventos para o dia selecionado.
-}
+    return _events[DateTime(day.year, day.month, day.day)] ?? []; // Retorna a lista de eventos ou uma lista vazia.
+  }
 
   @override
   Widget build(BuildContext context) { // Método para construir a interface do widget.
