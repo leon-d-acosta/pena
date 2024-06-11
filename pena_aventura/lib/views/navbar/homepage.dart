@@ -29,7 +29,7 @@ class _HomePageState extends State<HomePage> {
       body: views[_selectedIndex],
       bottomNavigationBar: CurvedNavigationBar(
         buttonBackgroundColor:c.verde_2,
-        backgroundColor: c.branco,
+        backgroundColor: c.cinza,
         color: c.azul_1,
         animationDuration: const Duration(milliseconds: 300),
         height: 60,

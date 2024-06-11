@@ -43,7 +43,7 @@ class _PostosState extends State<Postos> {
   @override
   Widget build(BuildContext context) { // Define o método de construção do widget.
     return Scaffold(
-      backgroundColor: c.branco, // Define a cor de fundo da tela.
+      backgroundColor: c.cinza, // Define a cor de fundo da tela.
       body: Padding(
         padding: const EdgeInsets.all(10), // Define o preenchimento ao redor do corpo.
         child: FutureBuilder(
@@ -69,7 +69,7 @@ class _PostosState extends State<Postos> {
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5), // Define os cantos arredondados do contêiner.
-                      color: c.cinza_2, // Define a cor de fundo do contêiner.
+                      color: c.azul_2.withOpacity(0.4), // Define a cor de fundo do contêiner.
                     ),
                     width: MediaQuery.of(context).orientation == Orientation.portrait
                         ? MediaQuery.of(context).size.width * 0.5 - 15 
@@ -78,7 +78,7 @@ class _PostosState extends State<Postos> {
                       crossAxisAlignment: CrossAxisAlignment.center, // Alinha os itens ao centro horizontalmente.
                       children: [
                         Container(height: MediaQuery.of(context).size.height/6, child: ClipRRect(borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5)), child: Image.network(snap[index]['foto'], fit: BoxFit.cover))), // Exibe a imagem do posto com cantos arredondados.
-                        Container(margin: const EdgeInsets.only(left: 20, right: 20), child: Center(child: Text(snap[index]['nome'], style: TextStyle(color: c.branco, fontSize: 15)))), // Exibe o nome do posto.
+                        Container(margin: const EdgeInsets.only(left: 20, right: 20), child: Center(child: Text(snap[index]['nome'], style: TextStyle(color: c.preto, fontSize: 15)))), // Exibe o nome do posto.
                       ],
                     ),
                   ),

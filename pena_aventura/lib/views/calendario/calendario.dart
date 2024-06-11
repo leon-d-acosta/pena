@@ -51,13 +51,12 @@ class _CalendarioState extends State<Calendario> { // Define o estado para o wid
     var url = Uri.parse('https://adminpena.oxb.pt/index.php/execucaoatividadesapp'); // Define a URL da API.
     var response = await http.post(url, body: { // Faz uma solicitação POST para a API.
       'id_utilizador': id.toString(), // Passa o ID do usuário como parâmetro.
-      'data_inicio': "2024-05-14", // Define a data de início.
-      'data_fim': "2024-07-30" // Define a data de fim.
+      'data_inicio': "2024-02-10", // Define a data de início.
+      'data_fim': "2024-10-30" // Define a data de fim.
     });
 
     if (response.statusCode == 200) { // Verifica se a resposta foi bem-sucedida.
       List<dynamic> data = json.decode(response.body)['registos']; // Decodifica a resposta JSON.
-      print(data); // Imprime os dados para depuração.
       _events.clear(); // Limpa os eventos existentes.
       for (var item in data) { // Itera sobre os dados recebidos.
         DateTime eventDate = DateTime.parse(item['data_criacao']); // Obtém a data do evento.
@@ -91,14 +90,13 @@ class _CalendarioState extends State<Calendario> { // Define o estado para o wid
       eventsForSelectedDay.addAll(value);
     }
   });
-  print("Eventos para $day: $eventsForSelectedDay"); // Adiciona um log para verificar os eventos carregados para a data selecionada.
   return eventsForSelectedDay; // Retorna os eventos para o dia selecionado.
 }
 
   @override
   Widget build(BuildContext context) { // Método para construir a interface do widget.
     return Scaffold( // Cria um Scaffold para a estrutura básica da tela.
-      backgroundColor: c.branco, // Define a cor de fundo.
+      backgroundColor: c.cinza, // Define a cor de fundo.
       body: SafeArea( // Garante que a área de trabalho esteja segura.
         child: FutureBuilder( // Constrói o widget com base em um futuro.
           future: _futureData, // Define o futuro como os dados filtrados.
@@ -107,7 +105,6 @@ class _CalendarioState extends State<Calendario> { // Define o estado para o wid
               return Center(child: CircularProgressIndicator()); // Exibe um indicador de carregamento.
             }
             if (snapshot.hasError) { // Verifica se houve um erro.
-              print(snapshot.data); // Imprime os dados para depuração.
               return Center(child: Text("Error ${snapshot.error}")); // Exibe uma mensagem de erro.
             }
             List snap = snapshot.data; // Obtém os dados do snapshot.
@@ -138,74 +135,81 @@ class _CalendarioState extends State<Calendario> { // Define o estado para o wid
                   ValueListenableBuilder(
                     valueListenable: _selectedEvents,
                     builder: (BuildContext context, List<Event> events, _) {
-                      return Padding( // Adiciona preenchimento ao contêiner.
-                        padding: const EdgeInsets.all(10.0), // Define o preenchimento.
-                        child: Container( // Cria um contêiner.
-                          width: MediaQuery.of(context).size.width, // Define a largura como a largura da tela.
-                          height: _calendarFormat == CalendarFormat.twoWeeks
-                              ? MediaQuery.of(context).size.height / 1.75
-                              : _calendarFormat == CalendarFormat.month
-                                  ? MediaQuery.of(context).size.height / 2.75
-                                  : _calendarFormat == CalendarFormat.week
-                                      ? MediaQuery.of(context).size.height / 1.5
-                                      : null, // Ajusta a altura com base no formato do calendário.
-                          decoration: BoxDecoration( // Adiciona decoração ao contêiner.
-                              color: c.azul_2.withOpacity(0.4), // Define a cor de fundo.
-                              borderRadius: BorderRadius.circular(30)), // Define os cantos arredondados.
-                          child: Padding( // Adiciona preenchimento interno.
-                            padding: const EdgeInsets.all(10.0), // Define o preenchimento.
-                            child: ListView.builder( // Cria uma lista de itens rolável.
-                              itemCount: events.length, // Define o número de itens na lista.
-                              itemBuilder: (context, index) => Padding( // Constrói cada item da lista.
-                                padding: const EdgeInsets.all(8.0), // Define o preenchimento dos itens.
-                                child: GestureDetector(
-                                  onTap: () => showModalBottomSheet(
-                                    backgroundColor: Color.fromARGB(255, 117, 158, 192),
-                                    context: context,
-                                    builder: (context) {
-                                      return Padding(
-                                        padding: const EdgeInsets.all(20.0),
-                                        child: Container(
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                      return Container( // Cria um contêiner.
+                        width: MediaQuery.of(context).size.width, // Define a largura como a largura da tela.
+                        height: _calendarFormat == CalendarFormat.twoWeeks
+                            ? MediaQuery.of(context).size.height / 1.5
+                            : _calendarFormat == CalendarFormat.month
+                                ? MediaQuery.of(context).size.height / 2.2
+                                : _calendarFormat == CalendarFormat.week
+                                    ? MediaQuery.of(context).size.height / 1.4
+                                    : null, // Ajusta a altura com base no formato do calendário.
+                        decoration: BoxDecoration( // Adiciona decoração ao contêiner.
+                            color: c.cinza, // Define a cor de fundo.
+                            border: Border(
+                              top: BorderSide( color: c.preto, width: 1)
+                            )
+                            ),
+                        child: events.length<=0
+                        ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('Nenhuma atividade neste dia 😥'),
+                          ],
+                        )
+                        :ListView.builder( // Cria uma lista de itens rolável.
+                          itemCount: events.length, // Define o número de itens na lista.
+                          itemBuilder: (context, index) => Padding( // Constrói cada item da lista.
+                            padding: const EdgeInsets.all(8.0), // Define o preenchimento dos itens.
+                            child: GestureDetector(
+                              onTap: () => showModalBottomSheet(
+                                backgroundColor: c.cinza,
+                                context: context,
+                                builder: (context) {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(20.0),
+                                    child: Container(
+                                      height: MediaQuery.of(context).size.height/4,
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Center(child: Text(snap[index]['nome_posto'], style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),)),
+                                          Center(child: Text(snap[index]['nome_produto'], style: TextStyle(fontSize: 18),)),
+                                          SizedBox(height: 20,),
+                                          Text(snap[index]['data_criacao'], style: TextStyle(fontSize: 18),),
+                                          const SizedBox(height: 10,),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Text(snap[index]['nome_posto'], style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
-                                              Text(snap[index]['nome_produto'], style: TextStyle(fontSize: 18),),
-                                              Text(snap[index]['data_criacao'], style: TextStyle(fontSize: 18),),
-                                              const SizedBox(height: 10,),
                                               Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                 children: [
-                                                  Row(
-                                                    children: [
-                                                      Text("Cliente: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
-                                                      Text(snap[index]['cliente'], style: TextStyle(fontSize: 18),),
-                                                    ],
-                                                  ),
-                                                  Row(
-                                                    children: [
-                                                      Text("Quantidade: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
-                                                      Text(snap[index]['quantidade_comprada'], style: TextStyle(fontSize: 18),),
-                                                    ],
-                                                  )
+                                                  Text("Cliente: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
+                                                  Text(snap[index]['cliente'], style: TextStyle(fontSize: 18),),
                                                 ],
                                               ),
+                                              Row(
+                                                children: [
+                                                  Text("Quantidade: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
+                                                  Text(snap[index]['quantidade_comprada'], style: TextStyle(fontSize: 18),),
+                                                ],
+                                              )
                                             ],
                                           ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                  child: Container( // Cria um contêiner para cada item.
-                                    padding: const EdgeInsets.all(10), // Define o preenchimento interno.
-                                    decoration: BoxDecoration( // Adiciona decoração ao contêiner.
-                                        borderRadius: BorderRadius.circular(15), // Define os cantos arredondados.
-                                        border: Border.all(width: 1)), // Adiciona uma borda ao contêiner.
-                                    child: Text(
-                                      "${events[index].title}", // Exibe o nome do produto ou um valor padrão.
-                                      style: TextStyle(fontSize: 18), // Define o estilo do texto.
+                                        ],
+                                      ),
                                     ),
-                                  ),
+                                  );
+                                },
+                              ),
+                              child: Container( // Cria um contêiner para cada item.
+                                padding: const EdgeInsets.all(10), // Define o preenchimento interno.
+                                decoration: BoxDecoration( // Adiciona decoração ao contêiner.
+                                    borderRadius: BorderRadius.circular(15), // Define os cantos arredondados.
+                                    border: Border.all(width: 1)), // Adiciona uma borda ao contêiner.
+                                child: Text(
+                                  "${snap[index]['nome_posto']}", // Exibe o nome do produto ou um valor padrão.
+                                  style: TextStyle(fontSize: 18), // Define o estilo do texto.
                                 ),
                               ),
                             ),

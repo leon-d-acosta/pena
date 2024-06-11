@@ -147,7 +147,7 @@ class _InfoPicagemState extends State<InfoPicagem> { // Estado da tela de inform
   @override
   Widget build(BuildContext context) { // Método para construir a interface do usuário
     return Scaffold( // Retorna um widget de Scaffold
-      backgroundColor: c.branco, // Define a cor de fundo do Scaffold
+      backgroundColor: c.cinza, // Define a cor de fundo do Scaffold
       body: SafeArea( // Corpo seguro do Scaffold
         child: FutureBuilder( // Construtor de widget baseado em futuro
           future: _getFilteredData(), // Futuro para construir o widget
@@ -190,7 +190,16 @@ class _InfoPicagemState extends State<InfoPicagem> { // Estado da tela de inform
                       ),
                     ),
                     const SizedBox(height: 10),
-                    ValueListenableBuilder(
+                    snap.length<=0?Center(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text('Não há informação sobre picagem', style: TextStyle(fontSize: 20),),
+                          Text('tente com outro filtro 😓', style: TextStyle(fontSize: 20),),
+                        ],
+                      ),
+                    )
+                    :ValueListenableBuilder(
                       valueListenable: _isExpanded,
                       builder: (context, List<bool> isExpanded, _) {
                         return ExpansionPanelList( // Lista de painéis expansíveis
@@ -200,7 +209,7 @@ class _InfoPicagemState extends State<InfoPicagem> { // Estado da tela de inform
                           materialGapSize: 5, // Tamanho do espaço entre os painéis
                           children: List.generate(snap.length, (index) { // Gera uma lista de widgets com base nos dados
                             return ExpansionPanel( // Painel expansível
-                              backgroundColor: c.branco, // Cor de fundo do painel
+                              backgroundColor: c.cinza, // Cor de fundo do painel
                               canTapOnHeader: true, // Permite tocar no cabeçalho do painel
                               isExpanded: isExpanded[index], // Define se o painel está expandido ou não
                               headerBuilder: (context, isExpanded) => Padding( // Construtor de cabeçalho
@@ -246,7 +255,7 @@ class _InfoPicagemState extends State<InfoPicagem> { // Estado da tela de inform
                                     ), // Exibe dados dinâmicos
                                     Row(
                                       children: [
-                                        Text("Monitor:", style: TextStyle(fontWeight: FontWeight.bold),),
+                                        Text("Cliente:", style: TextStyle(fontWeight: FontWeight.bold),),
                                         Text("${snap[index]['cliente']}"),
                                       ],
                                     ), // Exibe dados dinâmicos

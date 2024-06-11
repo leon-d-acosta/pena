@@ -66,7 +66,7 @@ class _PerfilState extends State<Perfil> {
     return Stack(
       children: [
         Container(
-          color: c.branco, // Define a cor de fundo do container
+          color: c.cinza, // Define a cor de fundo do container
           height: double.infinity, // Define a altura como infinita
           padding: const EdgeInsets.all(20), // Define o padding
           child: Column(
@@ -114,7 +114,7 @@ class _PerfilState extends State<Perfil> {
                     List<String> fields = ['nome', 'apelido', 'email']; // Campos do perfil
                     return Container(
                       decoration: BoxDecoration(
-                        color: c.azul_1,
+                        color: c.branco,
                         borderRadius: BorderRadius.circular(10),
                       ), // Decoração do container
                       height: MediaQuery.of(context).size.height,
@@ -131,11 +131,11 @@ class _PerfilState extends State<Perfil> {
                             child: ListTile(
                               title: Text(
                                 snap[0][field],
-                                style: const TextStyle(color: c.branco), // Estilo do texto
+                                style: const TextStyle(color: c.preto), // Estilo do texto
                               ),
                               trailing: field != 'email'
-                                  ? const Icon(Icons.arrow_forward_ios, color: c.branco,)
-                                  : const Icon(Icons.alternate_email, color: c.branco,), // Ícone conforme o campo
+                                  ? const Icon(Icons.edit, color: c.cinza_2,)
+                                  : const Icon(Icons.alternate_email, color: c.cinza_2,), // Ícone conforme o campo
                             ),
                           );
                         }),
@@ -158,18 +158,10 @@ class _PerfilState extends State<Perfil> {
                 borderRadius: BorderRadius.circular(50), // Define os cantos arredondados
               ),
               padding: const EdgeInsets.all(10), // Define o padding
-              child: const Row(
-                children: [
-                  Text(
-                    'LOGOUT  ',
-                    style: TextStyle(color: c.branco, fontSize: 15, fontWeight: FontWeight.bold), // Estilo do texto
-                  ),
-                  Icon(
-                    Icons.logout,
-                    size: 20,
-                    color: c.branco, // Cor do ícone
-                  ),
-                ],
+              child: Icon(
+                Icons.power_settings_new,
+                size: 25,
+                color: c.branco, // Cor do ícone
               ),
             ),
           ),
