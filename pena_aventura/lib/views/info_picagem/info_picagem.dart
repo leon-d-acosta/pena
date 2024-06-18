@@ -16,6 +16,7 @@ class _InfoPicagemState extends State<InfoPicagem> { // Estado da tela de inform
   TextEditingController dataFimController = TextEditingController(); // Controlador para a data de término
   ValueNotifier<List<bool>> _isExpanded = ValueNotifier<List<bool>>([]); // Lista para controlar a expansão dos painéis
   String total = "0";
+  var now = DateTime.now();
   late Future<List<dynamic>> _futureData; // Declara uma variável para armazenar os dados futuros.
 
   @override
@@ -122,7 +123,7 @@ class _InfoPicagemState extends State<InfoPicagem> { // Estado da tela de inform
                     ),
                   ),
                   GestureDetector( //botão para filtrar com as datas que insiriu o usuario
-                    onTap: () {
+                    onTap: () {                   
                       _getFilteredData().then((value) => setState(() {}));
                       Navigator.pop(context);
                     },
@@ -172,6 +173,19 @@ class _InfoPicagemState extends State<InfoPicagem> { // Estado da tela de inform
                 padding: const EdgeInsets.all(10.0),
                 child: Column(
                   children: [
+                    Container(
+                      padding: const EdgeInsets.all(15),
+                      height: MediaQuery.of(context).size.height/10,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        color: c.azul_2.withOpacity(0.2)
+                      ),
+                      child: Center(
+                        child: Text("${now.toString().split(" ")[0]}"),
+                      ),
+                    ),
+                    SizedBox(height: 5,),
                     Container(
                       padding: const EdgeInsets.all(15),
                       height: MediaQuery.of(context).size.height/6.5,
@@ -302,8 +316,8 @@ class _InfoPicagemState extends State<InfoPicagem> { // Estado da tela de inform
     DateTime? picked = await showDatePicker( // Exibe um seletor de data
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime(2022),
-      lastDate: DateTime(2040)
+      firstDate: DateTime(2023),
+      lastDate: DateTime(2025)
     );
 
     if (picked != null) { // Verifica se a data foi selecionada
@@ -315,8 +329,8 @@ class _InfoPicagemState extends State<InfoPicagem> { // Estado da tela de inform
     DateTime? picked = await showDatePicker( // Exibe um seletor de data
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime(2022),
-      lastDate: DateTime(2040)
+      firstDate: DateTime(2023),
+      lastDate: DateTime(2025)
     );
 
     if (picked != null) { // Verifica se a data foi selecionada

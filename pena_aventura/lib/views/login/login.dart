@@ -166,7 +166,7 @@ class _LoginState extends State<Login> { // Constructor de la clase 'Login' con 
                       padding: const EdgeInsets.all(5), // Añade padding al contenedor.
                       margin: const EdgeInsets.only(left: 25, right: 25), // Añade margen a los lados.
                       decoration: BoxDecoration( // Aplica decoraciones al contenedor.
-                        color: Colors.grey[200], // Establece el color de fondo.
+                        color: c.cinza, // Establece el color de fondo.
                         borderRadius: BorderRadius.circular(10) // Redondea las esquinas.
                       ),
                       child: Theme( // Aplica un tema personalizado al campo de texto.
