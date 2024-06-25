@@ -1,223 +1,344 @@
-import 'dart:convert'; // Importa a biblioteca para conversão de dados JSON.
-import 'package:flutter/material.dart'; // Importa o pacote principal do Flutter.
-import 'package:PenaAventura/views/cores/cor.dart'; // Importa um arquivo específico para cores do aplicativo.
-import 'package:shared_preferences/shared_preferences.dart'; // Importa a biblioteca para manipulação de preferências compartilhadas.
-import 'package:table_calendar/table_calendar.dart'; // Importa o pacote do calendário.
-import 'package:http/http.dart' as http; // Importa a biblioteca HTTP para fazer solicitações web.
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:PenaAventura/views/cores/cor.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:table_calendar/table_calendar.dart';
+import 'package:http/http.dart' as http;
 
-class Calendario extends StatefulWidget { // Define um widget stateful para o calendário.
-  const Calendario({Key? key}) : super(key: key); // Construtor da classe Calendario.
-
-  @override
-  State<Calendario> createState() => _CalendarioState(); // Cria o estado do widget.
-}
-
-class Event { // Define uma classe para representar um evento.
-  final String title; // Título do evento.
-
-  Event({required this.title}); // Construtor da classe Event.
+class Calendario extends StatefulWidget {
+  const Calendario({Key? key}) : super(key: key);
 
   @override
-  String toString() => title; // Adiciona uma representação em string para depuração.
+  State<Calendario> createState() => _CalendarioState();
 }
 
-class _CalendarioState extends State<Calendario> { // Define o estado para o widget Calendario.
-  late Future<List<dynamic>> _futureData; // Declaração de uma variável para armazenar dados futuros.
-  CalendarFormat _calendarFormat = CalendarFormat.month; // Define o formato do calendário como mensal.
-  DateTime _focusedDay = DateTime.now(); // Define o dia focado como o dia atual.
-  DateTime? _selectedDay; // Variável para armazenar o dia selecionado.
-  Map<DateTime, List<Event>> _events = {}; // Mapa para armazenar eventos por data.
+class Event {
+  final String title;
+  final String nome_posto;
+  final String nome_produto;
+  final String data_criacao;
+  final String cliente;
+  final String quantidade_comprada;
+
+  Event({
+    required this.title,
+    required this.nome_posto,
+    required this.nome_produto,
+    required this.data_criacao,
+    required this.cliente,
+    required this.quantidade_comprada,
+  });
+
+  @override
+  String toString() => title;
+}
+
+class _CalendarioState extends State<Calendario> {
+  late Future<void> _futureData;
+  CalendarFormat _calendarFormat = CalendarFormat.month;
+  DateTime _focusedDay = DateTime.now();
+  DateTime? _selectedDay;
+  Map<DateTime, List<Event>> _events = {};
   late final ValueNotifier<List<Event>> _selectedEvents;
+  late final ValueNotifier<Map<DateTime, List<Event>>> _filteredEventsNotifier;
 
   @override
-  void initState() { // Método que é chamado quando o estado é criado.
-    super.initState(); // Chama o método initState da superclasse.
-    _refreshView(); // Chama o método para atualizar a visão.
+  void initState() {
+    super.initState();
     _selectedDay = _focusedDay;
     _selectedEvents = ValueNotifier(_getEventsForDay(_selectedDay!));
+    _filteredEventsNotifier = ValueNotifier({});
+    _futureData = _refreshView(); // Inicializa _futureData correctamente
   }
 
-  void _refreshView() { // Método para atualizar a visão.
-    _futureData = _getFilteredData(); // Atribui a chamada do método para obter dados filtrados.
+  Future<void> _refreshView() async {
+    final firstDayOfMonth = DateTime(_focusedDay.year, _focusedDay.month, 1);
+    final lastDayOfMonth = DateTime(_focusedDay.year, _focusedDay.month + 1, 0);
+    await _getFilteredData(firstDayOfMonth, lastDayOfMonth);
   }
 
-  Future<int?> _getid() async { // Método assíncrono para obter o ID do usuário.
-    SharedPreferences prefs = await SharedPreferences.getInstance(); // Obtém as preferências compartilhadas.
-    return prefs.getInt('id'); // Retorna o ID do usuário das preferências.
+  Future<int?> _getid() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getInt('id');
   }
 
-  Future<List<dynamic>> _getFilteredData() async { // Método assíncrono para obter dados filtrados.
-    int id = (await _getid()) ?? 0; // Obtém o ID do usuário, ou 0 se for nulo.
-    var url = Uri.parse('https://adminpena.oxb.pt/index.php/execucaoatividadesapp'); // Define a URL da API.
-    var response = await http.post(url, body: { // Faz uma solicitação POST para a API.
-      'id_utilizador': id.toString(), // Passa o ID do usuário como parâmetro.
-      'data_inicio': "2024-02-10", // Define a data de início.
-      'data_fim': "2024-10-30" // Define a data de fim.
+  Future<void> _getFilteredData(DateTime startDate, DateTime endDate) async {
+    int id = (await _getid()) ?? 0;
+    var url = Uri.parse('https://adminpena.oxb.pt/index.php/execucaoatividadesapp');
+    var response = await http.post(url, body: {
+      'id_utilizador': id.toString(),
+      'data_inicio': startDate.toIso8601String(),
+      'data_fim': endDate.toIso8601String()
     });
 
-    if (response.statusCode == 200) { // Verifica se a resposta foi bem-sucedida.
-      List<dynamic> data = json.decode(response.body)['registos']; // Decodifica a resposta JSON.
-      _events.clear(); // Limpa os eventos existentes.
-      for (var item in data) { // Itera sobre os dados recebidos.
-        DateTime eventDate = DateTime.parse(item['data_criacao']); // Obtém a data do evento.
-        eventDate = DateTime(eventDate.year, eventDate.month, eventDate.day); // Normaliza a data para ignorar tempo.
-        if (_events[eventDate] == null) { // Verifica se a data não está no mapa.
-          _events[eventDate] = []; // Inicializa a lista para essa data.
+    if (response.statusCode == 200) {
+      List<dynamic> data = json.decode(response.body)['registos'];
+      Map<DateTime, List<Event>> newEvents = {};
+      for (var item in data) {
+        DateTime eventDate = DateTime.parse(item['data_criacao']);
+        eventDate = DateTime(eventDate.year, eventDate.month, eventDate.day);
+        if (newEvents[eventDate] == null) {
+          newEvents[eventDate] = [];
         }
-        String nome = item['nome_produto'] ?? 'No Name'; // Define o nome do evento, ou um valor padrão.
-        _events[eventDate]!.add(Event(title: nome)); // Adiciona o nome do evento à lista.
+        newEvents[eventDate]!.add(
+          Event(
+            title: item['nome_produto'] ?? '',
+            nome_posto: item['nome_posto'] ?? '',
+            nome_produto: item['nome_produto'] ?? '',
+            data_criacao: item['data_criacao'] ?? '',
+            cliente: item['cliente'] ?? '',
+            quantidade_comprada: item['quantidade_comprada'] ?? '',
+          ),
+        );
       }
-      return data; // Retorna os dados.
+      setState(() {
+        _events = newEvents;
+        _filteredEventsNotifier.value = newEvents;
+      });
     } else {
-      throw Exception('Erro ao obter os dados'); // Lança uma exceção em caso de erro.
+      throw Exception('Erro ao obter os dados');
     }
   }
 
-  void _onDaySelected(DateTime selectedDay, DateTime focusedDay) { // Método chamado quando um dia é selecionado.
-    if (!isSameDay(_selectedDay, selectedDay)) { // Verifica se o dia selecionado é diferente do dia selecionado anteriormente.
-      setState(() { // Atualiza o estado.
-        _selectedDay = selectedDay; // Define o dia selecionado.
-        _focusedDay = focusedDay; // Define o dia focado.
-        _selectedEvents.value = _getEventsForDay(selectedDay); // Atualiza os eventos selecionados.
+  void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
+    if (!isSameDay(_selectedDay, selectedDay)) {
+      setState(() {
+        _selectedDay = selectedDay;
+        _focusedDay = focusedDay;
+        _selectedEvents.value = _getEventsForDay(selectedDay);
       });
     }
   }
 
-  List<Event> _getEventsForDay(DateTime day) { // Método para obter eventos de um dia específico.
-  List<Event> eventsForSelectedDay = [];
-  _events.forEach((key, value) {
-    if (key.year == day.year && key.month == day.month && key.day == day.day) {
-      eventsForSelectedDay.addAll(value);
-    }
-  });
-  return eventsForSelectedDay; // Retorna os eventos para o dia selecionado.
-}
+  void _onMonthChanged(DateTime focusedDay) {
+    setState(() {
+      _focusedDay = focusedDay;
+      _refreshView();
+    });
+  }
+
+  List<Event> _getEventsForDay(DateTime dataselecionada) {
+    List<Event> eventsForSelectedDay = [];
+    _events.forEach((key, value) {
+      if (key.year == dataselecionada.year && key.month == dataselecionada.month && key.day == dataselecionada.day) {
+        // Limita a 5 eventos por día
+        eventsForSelectedDay.addAll(value.take(5));
+      }
+    });
+    return eventsForSelectedDay;
+  }
+
+  void _loadMoreEvents(DateTime selectedDay) {
+    setState(() {
+      _selectedEvents.value = _getEventsForDay(selectedDay);
+    });
+  }
 
   @override
-  Widget build(BuildContext context) { // Método para construir a interface do widget.
-    return Scaffold( // Cria um Scaffold para a estrutura básica da tela.
-      backgroundColor: c.cinza, // Define a cor de fundo.
-      body: SafeArea( // Garante que a área de trabalho esteja segura.
-        child: FutureBuilder( // Constrói o widget com base em um futuro.
-          future: _futureData, // Define o futuro como os dados filtrados.
-          builder: (BuildContext context, AsyncSnapshot snapshot) { // Construtor para o snapshot.
-            if (snapshot.connectionState == ConnectionState.waiting) { // Verifica se ainda está carregando.
-              return Center(child: CircularProgressIndicator()); // Exibe um indicador de carregamento.
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: c.cinza,
+      body: SafeArea(
+        child: FutureBuilder(
+          future: _futureData,
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
             }
-            if (snapshot.hasError) { // Verifica se houve um erro.
-              return Center(child: Text("Error ${snapshot.error}")); // Exibe uma mensagem de erro.
+            if (snapshot.hasError) {
+              return Center(child: Text("Error ${snapshot.error}"));
             }
-            List snap = snapshot.data; // Obtém os dados do snapshot.
-            return SingleChildScrollView( // Permite rolagem na tela.
-              child: Column( // Cria uma coluna de widgets.
+            return SingleChildScrollView(
+              child: Column(
                 children: [
-                  TableCalendar( // Cria o calendário.
-                    locale: 'pt_PT', // Define o idioma.
-                    firstDay: DateTime.utc(2022, 1, 1), // Define o primeiro dia do calendário.
-                    lastDay: DateTime.utc(2030, 1, 1), // Define o último dia do calendário.
-                    focusedDay: _focusedDay, // Define o dia focado.
-                    selectedDayPredicate: (day) { // Verifica se o dia é o selecionado.
-                      return isSameDay(_selectedDay, day); // Compara os dias.
+                  TableCalendar(
+                    locale: 'pt_PT',
+                    firstDay: DateTime.utc(2022, 1, 1),
+                    lastDay: DateTime.utc(2030, 1, 1),
+                    focusedDay: _focusedDay,
+                    selectedDayPredicate: (day) {
+                      return isSameDay(_selectedDay, day);
                     },
                     onDaySelected: _onDaySelected,
-                    calendarFormat: _calendarFormat, // Define o formato do calendário.
+                    onPageChanged: _onMonthChanged,
+                    calendarFormat: _calendarFormat,
+                    availableCalendarFormats: const {
+                      CalendarFormat.month: 'Mensal',
+                      CalendarFormat.twoWeeks: '2 semanas',
+                      CalendarFormat.week: 'Semanal',
+                    },
                     daysOfWeekStyle: const DaysOfWeekStyle(
                       weekdayStyle: TextStyle(color: c.azul_1),
-                      weekendStyle: TextStyle(color: Colors.red)
+                      weekendStyle: TextStyle(color: Colors.red),
                     ),
-                    onFormatChanged: (format) { // Método chamado ao mudar o formato.
-                      setState(() { // Atualiza o estado.
-                        _calendarFormat = format; // Define o novo formato.
+                    onFormatChanged: (format) {
+                      setState(() {
+                        _calendarFormat = format;
                       });
                     },
-                    eventLoader: _getEventsForDay, // Define o método para carregar eventos.
+                    calendarStyle: const CalendarStyle(markersAlignment: Alignment.bottomRight),
+                    eventLoader: _getEventsForDay,
+                    calendarBuilders: CalendarBuilders(
+                      markerBuilder: (context, day, events) => events.isNotEmpty
+                          ? Container(
+                              width: 15,
+                              height: 15,
+                              alignment: Alignment.center,
+                              decoration: const BoxDecoration(
+                                color: Colors.lightBlue,
+                              ),
+                              child: Text(
+                                '${events.length}',
+                                style: const TextStyle(color: Colors.white, fontSize: 10),
+                              ),
+                            )
+                          : null,
+                    ),
                   ),
                   ValueListenableBuilder(
                     valueListenable: _selectedEvents,
                     builder: (BuildContext context, List<Event> events, _) {
-                      return Container( // Cria um contêiner.
-                        width: MediaQuery.of(context).size.width, // Define a largura como a largura da tela.
+                      return Container(
+                        width: MediaQuery.of(context).size.width,
                         height: _calendarFormat == CalendarFormat.twoWeeks
                             ? MediaQuery.of(context).size.height / 1.5
                             : _calendarFormat == CalendarFormat.month
                                 ? MediaQuery.of(context).size.height / 2.2
                                 : _calendarFormat == CalendarFormat.week
                                     ? MediaQuery.of(context).size.height / 1.4
-                                    : null, // Ajusta a altura com base no formato do calendário.
-                        decoration: BoxDecoration( // Adiciona decoração ao contêiner.
-                            color: c.cinza, // Define a cor de fundo.
-                            border: Border(
-                              top: BorderSide( color: c.preto, width: 1)
-                            )
-                            ),
-                        child: events.length<=0
-                        ? Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text('Nenhuma atividade neste dia 😥'),
-                          ],
-                        )
-                        :ListView.builder( // Cria uma lista de itens rolável.
-                          itemCount: events.length, // Define o número de itens na lista.
-                          itemBuilder: (context, index) => Padding( // Constrói cada item da lista.
-                            padding: const EdgeInsets.all(8.0), // Define o preenchimento dos itens.
-                            child: GestureDetector(
-                              onTap: () => showModalBottomSheet(
-                                backgroundColor: c.cinza,
-                                context: context,
-                                builder: (context) {
-                                  return Padding(
-                                    padding: const EdgeInsets.all(20.0),
+                                    : null,
+                        decoration: BoxDecoration(
+                          color: c.cinza,
+                          border: Border(top: BorderSide(color: c.preto, width: 1)),
+                        ),
+                        child: events.length <= 0
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text('Nenhuma atividade neste dia'),
+                                ],
+                              )
+                            : ListView.builder(
+                                itemCount: events.length,
+                                itemBuilder: (context, index) => Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: GestureDetector(
+                                    onTap: () => showModalBottomSheet(
+                                      backgroundColor: c.cinza,
+                                      context: context,
+                                      builder: (context) {
+                                        return Padding(
+                                          padding: const EdgeInsets.all(20.0),
+                                          child: Container(
+                                            height: MediaQuery.of(context).size.height / 4,
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Center(
+                                                  child: Text(
+                                                    events[index].nome_posto,
+                                                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                                                  ),
+                                                ),
+                                                Center(
+                                                  child: Text(
+                                                    events[index].nome_produto,
+                                                    style: TextStyle(fontSize: 18),
+                                                  ),
+                                                ),
+                                                SizedBox(height: 20),
+                                                Text(
+                                                  events[index].data_criacao,
+                                                  style: TextStyle(fontSize: 18),
+                                                ),
+                                                const SizedBox(height: 10),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        Text(
+                                                          "Cliente: ",
+                                                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                                                        ),
+                                                        Text(
+                                                          events[index].cliente,
+                                                          style: TextStyle(fontSize: 18),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Row(
+                                                      children: [
+                                                        Text(
+                                                          "Quantidade: ",
+                                                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                                                        ),
+                                                        Text(
+                                                          events[index].quantidade_comprada,
+                                                          style: TextStyle(fontSize: 18),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
                                     child: Container(
-                                      height: MediaQuery.of(context).size.height/4,
+                                      padding: const EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        border: Border.all(width: 0.5),
+                                      ),
                                       child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Center(child: Text(snap[index]['nome_posto'], style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),)),
-                                          Center(child: Text(snap[index]['nome_produto'], style: TextStyle(fontSize: 18),)),
-                                          SizedBox(height: 20,),
-                                          Text(snap[index]['data_criacao'], style: TextStyle(fontSize: 18),),
-                                          const SizedBox(height: 10,),
                                           Row(
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Row(
-                                                children: [
-                                                  Text("Cliente: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
-                                                  Text(snap[index]['cliente'], style: TextStyle(fontSize: 18),),
-                                                ],
+                                              Expanded(
+                                                child: Text(
+                                                  events[index].title,
+                                                  overflow: TextOverflow.ellipsis,
+                                                  softWrap: false,
+                                                  maxLines: 2,
+                                                  textScaler: TextScaler.linear(0.8),
+                                                ),
                                               ),
-                                              Row(
-                                                children: [
-                                                  Text("Quantidade: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
-                                                  Text(snap[index]['quantidade_comprada'], style: TextStyle(fontSize: 18),),
-                                                ],
+                                              Text(
+                                                "${events[index].quantidade_comprada} Qtd",
+                                                style: TextStyle(fontWeight: FontWeight.bold),
                                               )
+                                            ],
+                                          ),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(events[index].nome_posto),
+                                              Text(
+                                                "${events[index].data_criacao}",
+                                                style: TextStyle(color: c.azul_1),
+                                              ),
                                             ],
                                           ),
                                         ],
                                       ),
                                     ),
-                                  );
-                                },
-                              ),
-                              child: Container( // Cria um contêiner para cada item.
-                                padding: const EdgeInsets.all(10), // Define o preenchimento interno.
-                                decoration: BoxDecoration( // Adiciona decoração ao contêiner.
-                                    borderRadius: BorderRadius.circular(15), // Define os cantos arredondados.
-                                    border: Border.all(width: 1)), // Adiciona uma borda ao contêiner.
-                                child: Text(
-                                  "${snap[index]['nome_posto']}", // Exibe o nome do produto ou um valor padrão.
-                                  style: TextStyle(fontSize: 18), // Define o estilo do texto.
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
-                        ),
                       );
                     },
                   ),
+                  if (_selectedEvents.value.length > 5)
+                    TextButton(
+                      onPressed: () => _loadMoreEvents(_selectedDay!),
+                      child: Text('Carregar mais eventos'),
+                    ),
                 ],
               ),
             );

@@ -57,7 +57,7 @@ class _InfoPicagemState extends State<InfoPicagem> { // Estado da tela de inform
       context: context, // Contexto do aplicativo
       builder: (BuildContext context) { // Construtor do widget da folha de fundo modal
             return Container( // Widget de contêiner
-            height: MediaQuery.of(context).size.height/3,
+            height: MediaQuery.of(context).size.height/2.5,
               padding: EdgeInsets.all(20), // Preenchimento do contêiner
               child: Column( // Coluna de widgets
                 children: [ // Lista de widgets
@@ -66,23 +66,23 @@ class _InfoPicagemState extends State<InfoPicagem> { // Estado da tela de inform
                     onTap: () { // Função chamada ao tocar na lista
                       setState(() {}); // Atualiza a visualização
                       info_filtro = "Hoje";
-                      dataInicioController.text = now.toString().split(" ")[0];
-                        print(dataInicioController.text);
                       dataFimController.text = now.toString().split(" ")[0];
+                        print(dataInicioController.text);
+                      dataInicioController.text = now.toString().split(" ")[0];
                         print(dataFimController.text);
                       Navigator.pop(context);
                      _getFilteredData().then((value) => setState(() {}));
                     },
                   ),
                   ListTile(
-                    title: Text("Ultimos 7 dias"),
+                    title: Text("Últimos 7 dias"),
                     onTap: () {
                       setState(() {
-                        info_filtro = "Ultimos 7 dias";
-                        dataInicioController.text = now.toString().split(" ")[0];
+                        info_filtro = "Últimos 7 dias";
+                        dataFimController.text = now.toString().split(" ")[0];
                         print(dataInicioController.text);
                         var ultimo = now.subtract(Duration(days: 7));
-                        dataFimController.text = ultimo.toString().split(" ")[0];
+                        dataInicioController.text = ultimo.toString().split(" ")[0];
                         print(dataFimController.text);
                         Navigator.pop(context);
                         _getFilteredData().then((value) => setState(() {}));
@@ -90,14 +90,14 @@ class _InfoPicagemState extends State<InfoPicagem> { // Estado da tela de inform
                     },
                   ),
                   ListTile(
-                    title: Text("Ultimos 30 dias"),
+                    title: Text("Últimos 30 dias"),
                     onTap: () {
                       setState(() {
-                        info_filtro = "Ultimos 30 dias";
-                        dataInicioController.text = now.toString().split(" ")[0];
+                        info_filtro = "Últimos 30 dias";
+                        dataFimController.text = now.toString().split(" ")[0];
                         print(dataInicioController.text);
                         var ultimo = now.subtract(Duration(days: 30));
-                        dataFimController.text = ultimo.toString().split(" ")[0];
+                        dataInicioController.text = ultimo.toString().split(" ")[0];
                         print(dataFimController.text);
                         Navigator.pop(context);
                         _getFilteredData().then((value) => setState(() {}));
@@ -105,34 +105,97 @@ class _InfoPicagemState extends State<InfoPicagem> { // Estado da tela de inform
                     },
                   ),
                   ListTile(
-                    title: Text("Ultimos 60 dias"),
+                    title: Text("Últimos 60 dias"),
                     onTap: () {
                       setState(() {
-                        info_filtro = "Ultimos 60 dias";
-                        dataInicioController.text = now.toString().split(" ")[0];
+                        info_filtro = "Últimos 60 dias";
+                        dataFimController.text = now.toString().split(" ")[0];
                         print(dataInicioController.text);
                         var ultimo = now.subtract(Duration(days: 60));
-                        dataFimController.text = ultimo.toString().split(" ")[0];
+                        dataInicioController.text = ultimo.toString().split(" ")[0];
                         print(dataFimController.text);
                         Navigator.pop(context);
                        _getFilteredData().then((value) => setState(() {}));
                       });
                     },
                   ),
-                  /*GestureDetector( //botão para filtrar com as datas que insiriu o usuario
-                    onTap: () {                   
-                      _getFilteredData().then((value) => setState(() {}));
-                      Navigator.pop(context);
+                  ListTile(
+                    title: Text("Personalizado"),
+                    onTap:() {
+                      showModalBottomSheet(
+                        context: context, 
+                        builder: (BuildContext context){
+                          return Container(
+                            padding: const EdgeInsets.all(10),
+                            height: MediaQuery.of(context).size.height/3,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(5),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: c.preto),
+                                    borderRadius: BorderRadius.circular(20)
+                                  ),
+                                  child: TextField( //TextField para inserir a data do inicio da atividade
+                                    readOnly: true,
+                                    controller: dataInicioController,
+                                    cursorColor: c.preto,
+                                    obscureText: false,
+                                    onTap: () => dateInicioPicker(),
+                                    decoration: const InputDecoration(
+                                      labelStyle: TextStyle(color: c.preto),
+                                      icon: Icon(Icons.calendar_month_outlined),
+                                      label: Text("Data Início"),
+                                      border: InputBorder.none,
+                                      filled: false,
+                                    ),
+                                  ),
+                                ),
+                            Container(
+                              padding: const EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: c.preto),
+                                borderRadius: BorderRadius.circular(20)
+                              ),
+                              child: TextField( // TextField para inserir a data do fim da atividade
+                                readOnly: true,
+                                controller: dataFimController,
+                                cursorColor: c.preto,
+                                obscureText: false,
+                                onTap: () => dateFimPicker(),
+                                decoration: const InputDecoration(
+                                  labelStyle: TextStyle(color: c.preto),
+                                  icon: Icon(Icons.calendar_month_outlined),
+                                  label: Text("Data Fim"),
+                                  border: InputBorder.none,
+                                  filled: false,
+                                ),
+                              ),
+                            ),
+                            GestureDetector( //botão para filtrar com as datas que insiriu o usuario
+                              onTap: () {         
+                                info_filtro = "${dataInicioController.text} → ${dataFimController.text}";           
+                                _getFilteredData().then((value) => setState(() {}));
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                              },
+                              child: Container(
+                                height: MediaQuery.of(context).size.height/15,
+                                decoration: BoxDecoration(
+                                  color: c.azul_1,
+                                  borderRadius: BorderRadius.circular(5)
+                                ),
+                                child: Center(child: Text("Filtrar", style: TextStyle(color: c.branco))),
+                              ),
+                            )
+                              ],
+                            ),
+                          );
+                        }
+                        );
                     },
-                    child: Container(
-                      height: MediaQuery.of(context).size.height/15,
-                      decoration: BoxDecoration(
-                        color: c.azul_1,
-                        borderRadius: BorderRadius.circular(5)
-                      ),
-                      child: Center(child: Text("Filtrar", style: TextStyle(color: c.branco))),
-                    ),
-                  )*/
+                  )
                 ],
               ),
             );
@@ -307,7 +370,7 @@ class _InfoPicagemState extends State<InfoPicagem> { // Estado da tela de inform
       ),
     );
   }
-/*
+
   Future<void> dateInicioPicker() async { // Método assíncrono para selecionar a data de início
     DateTime? picked = await showDatePicker( // Exibe um seletor de data
       context: context,
@@ -333,5 +396,5 @@ class _InfoPicagemState extends State<InfoPicagem> { // Estado da tela de inform
       dataFimController.text = picked.toString().split(" ")[0]; // Define a data selecionada no controlador
       print(dataFimController.text);
     }
-  }*/
+  }
 }
