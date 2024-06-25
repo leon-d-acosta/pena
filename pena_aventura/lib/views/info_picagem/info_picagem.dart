@@ -111,7 +111,7 @@ class _InfoPicagemState extends State<InfoPicagem> { // Estado da tela de inform
                         info_filtro = "Ultimos 60 dias";
                         dataInicioController.text = now.toString().split(" ")[0];
                         print(dataInicioController.text);
-                        var ultimo = now.subtract(Duration(days: 200));
+                        var ultimo = now.subtract(Duration(days: 60));
                         dataFimController.text = ultimo.toString().split(" ")[0];
                         print(dataFimController.text);
                         Navigator.pop(context);
