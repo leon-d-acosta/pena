@@ -21,7 +21,7 @@ class _HomePageState extends State<HomePage> {
     final views = [
       const Postos(),
       const InfoPicagem(),
-      const Calendario(),
+      Calendario(),
       const Perfil(),
     ];
 

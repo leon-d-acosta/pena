@@ -121,18 +121,26 @@ class _CalendarioState extends State<Calendario> {
     List<Event> eventsForSelectedDay = [];
     _events.forEach((key, value) {
       if (key.year == dataselecionada.year && key.month == dataselecionada.month && key.day == dataselecionada.day) {
-        // Limita a 5 eventos por día
-        eventsForSelectedDay.addAll(value.take(5));
+        eventsForSelectedDay.addAll(value);
       }
     });
     return eventsForSelectedDay;
   }
 
-  void _loadMoreEvents(DateTime selectedDay) {
-    setState(() {
-      _selectedEvents.value = _getEventsForDay(selectedDay);
-    });
-  }
+  void _loadMoreEvents() {
+  setState(() {
+    int currentLength = _selectedEvents.value.length;
+    List<Event> allEvents = _getEventsForDay(_selectedDay!);
+    if (currentLength < allEvents.length) {
+      int nextIndex = currentLength + 5;
+      if (nextIndex > allEvents.length) {
+        nextIndex = allEvents.length;
+      }
+      _selectedEvents.value.addAll(allEvents.sublist(currentLength, nextIndex));
+    }
+  });
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -200,145 +208,141 @@ class _CalendarioState extends State<Calendario> {
                     builder: (BuildContext context, List<Event> events, _) {
                       return Container(
                         width: MediaQuery.of(context).size.width,
-                        height: _calendarFormat == CalendarFormat.twoWeeks
-                            ? MediaQuery.of(context).size.height / 1.5
-                            : _calendarFormat == CalendarFormat.month
-                                ? MediaQuery.of(context).size.height / 2.2
-                                : _calendarFormat == CalendarFormat.week
-                                    ? MediaQuery.of(context).size.height / 1.4
-                                    : null,
                         decoration: BoxDecoration(
                           color: c.cinza,
                           border: Border(top: BorderSide(color: c.preto, width: 1)),
                         ),
-                        child: events.length <= 0
-                            ? Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
+                        child: events.isEmpty
+                            ? Center(child: Text('Nenhuma atividade neste dia'))
+                            : Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('Nenhuma atividade neste dia'),
-                                ],
-                              )
-                            : ListView.builder(
-                                itemCount: events.length,
-                                itemBuilder: (context, index) => Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: GestureDetector(
-                                    onTap: () => showModalBottomSheet(
-                                      backgroundColor: c.cinza,
-                                      context: context,
-                                      builder: (context) {
-                                        return Padding(
-                                          padding: const EdgeInsets.all(20.0),
-                                          child: Container(
-                                            height: MediaQuery.of(context).size.height / 4,
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Center(
-                                                  child: Text(
-                                                    events[index].nome_posto,
-                                                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
-                                                  ),
-                                                ),
-                                                Center(
-                                                  child: Text(
-                                                    events[index].nome_produto,
-                                                    style: TextStyle(fontSize: 18),
-                                                  ),
-                                                ),
-                                                SizedBox(height: 20),
-                                                Text(
-                                                  events[index].data_criacao,
-                                                  style: TextStyle(fontSize: 18),
-                                                ),
-                                                const SizedBox(height: 10),
-                                                Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                  children: [
-                                                    Row(
-                                                      children: [
-                                                        Text(
-                                                          "Cliente: ",
-                                                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                                  ListView.builder(
+                                    shrinkWrap: true,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    itemCount: events.length > 5 ? 5 : events.length,
+                                    itemBuilder: (context, index) => Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          showModalBottomSheet(
+                                            backgroundColor: c.cinza,
+                                            context: context,
+                                            builder: (context) {
+                                              return Padding(
+                                                padding: const EdgeInsets.all(20.0),
+                                                child: Container(
+                                                  height: MediaQuery.of(context).size.height / 4,
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Center(
+                                                        child: Text(
+                                                          events[index].nome_posto,
+                                                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
                                                         ),
-                                                        Text(
-                                                          events[index].cliente,
+                                                      ),
+                                                      Center(
+                                                        child: Text(
+                                                          events[index].nome_produto,
                                                           style: TextStyle(fontSize: 18),
                                                         ),
-                                                      ],
-                                                    ),
-                                                    Row(
-                                                      children: [
-                                                        Text(
-                                                          "Quantidade: ",
-                                                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                                                        ),
-                                                        Text(
-                                                          events[index].quantidade_comprada,
-                                                          style: TextStyle(fontSize: 18),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ],
+                                                      ),
+                                                      SizedBox(height: 20),
+                                                      Text(
+                                                        events[index].data_criacao,
+                                                        style: TextStyle(fontSize: 18),
+                                                      ),
+                                                      const SizedBox(height: 10),
+                                                      Row(
+                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                        children: [
+                                                          Row(
+                                                            children: [
+                                                              Text(
+                                                                "Cliente: ",
+                                                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                                                              ),
+                                                              Text(
+                                                                events[index].cliente,
+                                                                style: TextStyle(fontSize: 18),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          Row(
+                                                            children: [
+                                                              Text(
+                                                                "Quantidade: ",
+                                                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                                                              ),
+                                                              Text(
+                                                                events[index].quantidade_comprada,
+                                                                style: TextStyle(fontSize: 18),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
-                                              ],
-                                            ),
+                                              );
+                                            },
+                                          );
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.all(10),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(10),
+                                            border: Border.all(width: 0.5),
                                           ),
-                                        );
-                                      },
-                                    ),
-                                    child: Container(
-                                      padding: const EdgeInsets.all(10),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        border: Border.all(width: 0.5),
-                                      ),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Expanded(
-                                                child: Text(
-                                                  events[index].title,
-                                                  overflow: TextOverflow.ellipsis,
-                                                  softWrap: false,
-                                                  maxLines: 2,
-                                                  textScaler: TextScaler.linear(0.8),
-                                                ),
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Expanded(
+                                                    child: Text(
+                                                      events[index].title,
+                                                      overflow: TextOverflow.ellipsis,
+                                                      softWrap: false,
+                                                      maxLines: 2,
+                                                      textScaleFactor: 0.8,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    "${events[index].quantidade_comprada} Qtd",
+                                                    style: TextStyle(fontWeight: FontWeight.bold),
+                                                  )
+                                                ],
                                               ),
-                                              Text(
-                                                "${events[index].quantidade_comprada} Qtd",
-                                                style: TextStyle(fontWeight: FontWeight.bold),
-                                              )
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Text(events[index].nome_posto),
+                                                  Text(
+                                                    "${events[index].data_criacao}",
+                                                    style: TextStyle(color: c.azul_1),
+                                                  ),
+                                                ],
+                                              ),
                                             ],
                                           ),
-                                          Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(events[index].nome_posto),
-                                              Text(
-                                                "${events[index].data_criacao}",
-                                                style: TextStyle(color: c.azul_1),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
+                                  if (events.length > 5)
+                                    TextButton(
+                                      onPressed: _loadMoreEvents,
+                                      child: Text('Carregar mais eventos'),
+                                    ),
+                                ],
                               ),
                       );
                     },
                   ),
-                  if (_selectedEvents.value.length > 5)
-                    TextButton(
-                      onPressed: () => _loadMoreEvents(_selectedDay!),
-                      child: Text('Carregar mais eventos'),
-                    ),
                 ],
               ),
             );
