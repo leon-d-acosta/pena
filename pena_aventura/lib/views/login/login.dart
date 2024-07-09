@@ -3,6 +3,7 @@ import 'dart:convert'; // Importa la librería 'dart:convert' para la manipulaci
 import 'package:PenaAventura/views/cores/cor.dart'; // Importa un archivo local con colores personalizados.
 import 'package:PenaAventura/views/navbar/homepage.dart'; // Importa la página de inicio.
 import 'package:flutter/material.dart'; // Importa el paquete Flutter para construir la interfaz de usuario.
+import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // Importa el paquete para el manejo de preferencias compartidas.
 import 'package:http/http.dart' as http; // Importa el paquete HTTP para realizar solicitudes a la web.
 
@@ -102,34 +103,28 @@ class _LoginState extends State<Login> { // Constructor de la clase 'Login' con 
   Widget build(BuildContext context) { // Define el método de construcción del widget.
     return Scaffold( // Retorna un widget Scaffold, que proporciona la estructura básica de la interfaz de usuario.
       body: Container( // Crea un contenedor para el cuerpo del Scaffold.
-        color: c.preto.withOpacity(0.6), // Establece el color de fondo del contenedor con una opacidad del 60%.
+        color: c.azul_1, // Establece el color de fondo del contenedor con una opacidad del 60%.
         child:  Center( // Centra el contenido del contenedor.
           child: Container( // Crea un contenedor para el formulario de inicio de sesión.
-            height: MediaQuery.of(context).orientation == Orientation.portrait // Establece la altura del contenedor en función de la orientación.
-                                                ? MediaQuery.of(context).size.height/1.5
-                                                : MediaQuery.of(context).size.height/1.1,
+            height: MediaQuery.of(context).size.height/1.5,
             width: MediaQuery.of(context).size.width/1.1, // Establece el ancho del contenedor.
             decoration: BoxDecoration( // Aplica decoraciones al contenedor.
-              color: c.cinza, // Establece el color de fondo.
+           // Establece el color de fondo.
               borderRadius: BorderRadius.circular(10), // Redondea las esquinas.
             ),
             child: Column( // Crea una columna para organizar los elementos verticalmente.
-              mainAxisAlignment: MainAxisAlignment.center, // Centra los elementos verticalmente.
+              mainAxisAlignment: MainAxisAlignment.spaceAround, // Centra los elementos verticalmente.
               crossAxisAlignment: CrossAxisAlignment.center, // Centra los elementos horizontalmente.
               children: [
-                 Icon(Icons.account_circle_rounded, color: c.azul_1, size: MediaQuery.of(context).orientation==Orientation.portrait // Muestra un ícono de cuenta.
-                                                                                                                ?150
-                                                                                                                :60,),
-                 Text("INICIAR SESSÃO", style: TextStyle(color: c.azul_1, fontSize: 20, fontWeight: FontWeight.bold),), // Muestra un texto de inicio de sesión.
-                const SizedBox(height: 10,), // Añade un espacio vertical de 10 píxeles.
+                 Image.asset('assets/imagens/logo_branco.png'),
+                //const SizedBox(height: 30,), // Añade un espacio vertical de 10 píxeles.
                 Column( // Crea otra columna para los campos de texto.
                   children: [
                     Container( // Crea un contenedor para el campo de texto del email.
                       padding: const EdgeInsets.all(5), // Añade padding al contenedor.
-                      margin: const EdgeInsets.only(left: 25, right: 25), // Añade margen a los lados.
                       decoration: BoxDecoration( // Aplica decoraciones al contenedor.
                         color: Colors.grey[200], // Establece el color de fondo.
-                        borderRadius: BorderRadius.circular(10) // Redondea las esquinas.
+                        borderRadius: BorderRadius.circular(50) // Redondea las esquinas.
                       ),
                       child: Theme( // Aplica un tema personalizado al campo de texto.
                         data: Theme.of(context).copyWith( // Copia el tema actual y aplica modificaciones.
@@ -146,28 +141,30 @@ class _LoginState extends State<Login> { // Constructor de la clase 'Login' con 
                             }),
                           ),
                         ),
-                      child: TextField( // Crea un campo de texto.
-                        controller: emailController, // Asigna el controlador del email.
-                        cursorColor: c.preto, // Establece el color del cursor.
-                        obscureText: false, // El texto no es oculto.
-                        decoration:  InputDecoration( // Aplica decoraciones al campo de texto.
-                          labelStyle: TextStyle(color: c.preto), // Establece el estilo del texto de la etiqueta.
-                          icon: Icon(Icons.person), // Añade un ícono al campo de texto.
-                          label: Text("Correo eletrónico"), // Añade una etiqueta al campo de texto.
-                          border: InputBorder.none, // Sin borde.
-                          filled: false, // El campo no está lleno.
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 10.0),
+                        child: TextField( // Crea un campo de texto.
+                          controller: emailController, // Asigna el controlador del email.
+                          cursorColor: c.preto, // Establece el color del cursor.
+                          obscureText: false, // El texto no es oculto.
+                          decoration:  InputDecoration( // Aplica decoraciones al campo de texto.
+                            labelStyle: TextStyle(color: c.preto), // Establece el estilo del texto de la etiqueta.
+                            icon: Icon(Icons.person), // Añade un ícono al campo de texto.
+                            label: Text("Correo eletrónico"), // Añade una etiqueta al campo de texto.
+                            border: InputBorder.none, // Sin borde.
+                            filled: false, // El campo no está lleno.
+                          ),
+                          
                         ),
-                        
                       ),
                       ),
                     ),
                     const SizedBox(height: 10,), // Añade un espacio vertical de 10 píxeles.
                     Container( // Crea un contenedor para el campo de texto de la contraseña.
                       padding: const EdgeInsets.all(5), // Añade padding al contenedor.
-                      margin: const EdgeInsets.only(left: 25, right: 25), // Añade margen a los lados.
                       decoration: BoxDecoration( // Aplica decoraciones al contenedor.
                         color: c.cinza, // Establece el color de fondo.
-                        borderRadius: BorderRadius.circular(10) // Redondea las esquinas.
+                        borderRadius: BorderRadius.circular(50) // Redondea las esquinas.
                       ),
                       child: Theme( // Aplica un tema personalizado al campo de texto.
                         data: Theme.of(context).copyWith( // Copia el tema actual y aplica modificaciones.
@@ -184,41 +181,42 @@ class _LoginState extends State<Login> { // Constructor de la clase 'Login' con 
                             }),
                           ),
                         ),
-                      child: TextField( // Crea un campo de texto.
-                        controller: passwordController, // Asigna el controlador de la contraseña.
-                        cursorColor: c.preto, // Establece el color del cursor.
-                        obscureText: true, // El texto es oculto.
-                        decoration: const InputDecoration( // Aplica decoraciones al campo de texto.
-                          labelStyle: TextStyle(color: c.preto), // Establece el estilo del texto de la etiqueta.
-                          icon: Icon(Icons.lock), // Añade un ícono al campo de texto.
-                          label: Text("Palavra-passe"), // Añade una etiqueta al campo de texto.
-                          border: InputBorder.none, // Sin borde.
-                          filled: false, // El campo no está lleno.
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 10.0),
+                        child: TextField( // Crea un campo de texto.
+                          controller: passwordController, // Asigna el controlador de la contraseña.
+                          cursorColor: c.preto, // Establece el color del cursor.
+                          obscureText: true, // El texto es oculto.
+                          decoration: const InputDecoration( // Aplica decoraciones al campo de texto.
+                            labelStyle: TextStyle(color: c.preto), // Establece el estilo del texto de la etiqueta.
+                            icon: Icon(Icons.lock), // Añade un ícono al campo de texto.
+                            label: Text("Palavra-passe"), // Añade una etiqueta al campo de texto.
+                            border: InputBorder.none, // Sin borde.
+                            filled: false, // El campo no está lleno.
+                          ),
                         ),
                       ),
                       ),
                     ),
-                  ],
-                ),
                 const SizedBox(height: 10,), // Añade un espacio vertical de 10 píxeles.
                 GestureDetector( // Crea un detector de gestos.
                   onTap: ()=>loginFunction(context), // Llama a la función de inicio de sesión cuando se toca.
                   child: Container( // Crea un contenedor para el botón de inicio de sesión.
                     width: MediaQuery.of(context).size.width, // Establece el ancho del contenedor.
                     padding: const EdgeInsets.all(10), // Añade padding al contenedor.
-                    margin: const EdgeInsets.only(left: 25, right: 25), // Añade margen a los lados.
                     decoration: BoxDecoration( // Aplica decoraciones al contenedor.
                       color: c.verde_1, // Establece el color de fondo.
-                      borderRadius: BorderRadius.circular(10) // Redondea las esquinas.
+                      borderRadius: BorderRadius.circular(50) // Redondea las esquinas.
                     ),
                     child: const Center( // Centra el contenido del contenedor.
                       child: Text("Iniciar sessão", style: TextStyle( // Añade un texto al botón de inicio de sesión.
                         color: c.branco, // Establece el color del texto.
-                        fontWeight: FontWeight.bold, // Establece el peso del texto.
-                        fontSize: 15) // Establece el tamaño del texto.
+                        fontSize: 21) // Establece el tamaño del texto.
                         )
                       ),
                     )
+                ),
+                  ],
                 ),
               ],
             ),
