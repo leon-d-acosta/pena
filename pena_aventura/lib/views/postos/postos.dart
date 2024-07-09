@@ -55,12 +55,12 @@ class _PostosState extends State<Postos> {
             children: [
               TextField(
                 decoration: InputDecoration(
+                  filled: true,
+                  fillColor: c.branco,
                   prefixIcon: Icon(Icons.search),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(50),
-                  ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(50),
+                    
                   ),
                 ),
                 onChanged: (value) {
@@ -83,7 +83,6 @@ class _PostosState extends State<Postos> {
                     List<dynamic> filteredPostos = _postos.where((posto) {
                       return posto['nome'].toLowerCase().contains(_searchQuery);
                     }).toList(); // Filtra os postos com base na consulta de pesquisa.
-                    print(filteredPostos);
                     return Center(
                       child: GridView.builder(
                         itemCount: filteredPostos.length, // Define o número de itens na grade.
