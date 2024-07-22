@@ -1,13 +1,13 @@
 import 'dart:convert';
-import 'package:PenaAventura/views/cores/cor.dart';
-import 'package:PenaAventura/views/navbar/homepage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_file_downloader/flutter_file_downloader.dart';
+import 'package:PenaAventura/views/cores/cor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class Login extends StatefulWidget {
   Login({super.key});
-  
+
   @override
   State<Login> createState() => _LoginState();
 }
@@ -41,16 +41,34 @@ class _LoginState extends State<Login> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Aviso"),
-          content: Text("Texto de tu popup aquí"),
+          title: Text("Há uma atualização disponivel"),
+          content: Text("Descarregue há última versão da aplicação."),
           actions: <Widget>[
             TextButton(
-              child: Text("Ir a tu URL"),
+              child: Text("Descarregar"),
               onPressed: () {
-                Navigator.of(context).pop();
-                // Aquí deberías navegar a tu URL deseada
-                // Ejemplo:
-                // Navigator.pushNamed(context, '/tu_ruta');
+                const String fileUrl = "https://adminpena.oxb.pt/assets/mobile/penaaventura.apk";
+                FileDownloader.downloadFile(
+                  url: fileUrl,
+                  name: 'penaaventura.zip',
+                  onProgress: (fileName, progress) => print('File $fileName has progress $progress'),
+                  onDownloadCompleted: (path) {
+                    print('Downloaded: $path');
+                    // Puedes agregar lógica adicional aquí si lo necesitas
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text('Descarga completada: $path'),
+                      backgroundColor: Colors.green,
+                    ));
+                  },
+                  onDownloadError: (errorMessage) {
+                    print('downloadError: $errorMessage');
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text('Error de descarga: $errorMessage'),
+                      backgroundColor: Colors.red,
+                    ));
+                  },
+                  notificationType: NotificationType.all
+                );
               },
             ),
           ],
@@ -148,7 +166,6 @@ class _LoginState extends State<Login> {
             width: MediaQuery.of(context).size.width / 1.1,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: Colors.white,
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -163,16 +180,78 @@ class _LoginState extends State<Login> {
                         color: Colors.grey[200],
                         borderRadius: BorderRadius.circular(50),
                       ),
+                      child: Theme(
+                        data: Theme.of(context).copyWith(
+                          primaryColor: c.azul_1,
+                          inputDecorationTheme: Theme.of(context).inputDecorationTheme.copyWith(
+                            iconColor: MaterialStateColor.resolveWith((Set<MaterialState> states) {
+                              if (states.contains(MaterialState.focused)) {
+                                return c.azul_1;
+                              }
+                              if (states.contains(MaterialState.error)) {
+                                return c.azul_1;
+                              }
+                              return Colors.grey;
+                            }),
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 10.0),
+                          child: TextField(
+                            controller: emailController,
+                            cursorColor: c.preto,
+                            obscureText: false,
+                            decoration: InputDecoration(
+                              labelStyle: TextStyle(color: c.preto),
+                              icon: Icon(Icons.person),
+                              label: Text("Correo eletrónico"),
+                              border: InputBorder.none,
+                              filled: false,
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
-                    const SizedBox(height: 10,),
+                    const SizedBox(height: 10),
                     Container(
                       padding: const EdgeInsets.all(5),
                       decoration: BoxDecoration(
-                        color: Colors.grey[200],
+                        color: c.cinza,
                         borderRadius: BorderRadius.circular(50),
                       ),
+                      child: Theme(
+                        data: Theme.of(context).copyWith(
+                          primaryColor: c.azul_1,
+                          inputDecorationTheme: Theme.of(context).inputDecorationTheme.copyWith(
+                            iconColor: MaterialStateColor.resolveWith((Set<MaterialState> states) {
+                              if (states.contains(MaterialState.focused)) {
+                                return c.azul_1;
+                              }
+                              if (states.contains(MaterialState.error)) {
+                                return c.azul_1;
+                              }
+                              return Colors.grey;
+                            }),
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 10.0),
+                          child: TextField(
+                            controller: passwordController,
+                            cursorColor: c.preto,
+                            obscureText: true,
+                            decoration: const InputDecoration(
+                              labelStyle: TextStyle(color: c.preto),
+                              icon: Icon(Icons.lock),
+                              label: Text("Palavra-passe"),
+                              border: InputBorder.none,
+                              filled: false,
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
-                    const SizedBox(height: 10,),
+                    const SizedBox(height: 10),
                     GestureDetector(
                       onTap: () => loginFunction(context),
                       child: Container(
