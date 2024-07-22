@@ -46,78 +46,76 @@ class _PostosState extends State<Postos> {
 
   @override
   Widget build(BuildContext context) { // Define o método de construção do widget.
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: c.cinza, // Define a cor de fundo da tela.
-        body: Padding(
-          padding: const EdgeInsets.all(10), // Define o preenchimento ao redor do corpo.
-          child: Column(
-            children: [
-              TextField(
-                decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.search),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(50),
-                  ),
+    return Scaffold(
+      backgroundColor: c.cinza, // Define a cor de fundo da tela.
+      body: Padding(
+        padding: const EdgeInsets.all(10), // Define o preenchimento ao redor do corpo.
+        child: Column(
+          children: [
+            SizedBox(height: 25,),
+            TextField(
+              decoration: InputDecoration(
+                prefixIcon: Icon(Icons.search),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(50),
                 ),
-                onChanged: (value) {
-                  setState(() {
-                    _searchQuery = value.toLowerCase(); // Atualiza a consulta de pesquisa.
-                  });
-                },
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(50),
+                ),
               ),
-              const SizedBox(height: 10),
-              Expanded(
-                child: FutureBuilder(
-                  future: _futureData, // Define o futuro a ser observado.
-                  builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) { // Verifica se os dados estão sendo carregados.
-                      return const Center(child: CircularProgressIndicator()); // Mostra um indicador de progresso enquanto os dados são carregados.
-                    }
-                    if (snapshot.hasError) { // Verifica se houve um erro ao carregar os dados.
-                      return Center(child: Text("${snapshot.error}")); // Mostra a mensagem de erro.
-                    }
-                    List<dynamic> filteredPostos = _postos.where((posto) {
-                      return posto['nome'].toLowerCase().contains(_searchQuery);
-                    }).toList(); // Filtra os postos com base na consulta de pesquisa.
-                    print(filteredPostos);
-                    return Center(
-                      child: GridView.builder(
-                        itemCount: filteredPostos.length, // Define o número de itens na grade.
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount:  2, // Define o número de colunas baseado na orientação da tela.
-                          mainAxisSpacing: 15, // Define o espaçamento principal entre os itens.
-                          crossAxisSpacing: 15 // Define o espaçamento cruzado entre os itens.
-                        ), 
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Qr_Scanner(id_posto: filteredPostos[index]['id']))), // Navega para a página de escaneamento QR ao tocar no item.
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5), // Define os cantos arredondados do contêiner.
-                                color: c.azul_2.withOpacity(0.4), // Define a cor de fundo do contêiner.
-                              ),
-                              width: MediaQuery.of(context).size.width * 0.5 - 15,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center, // Alinha os itens ao centro horizontalmente.
-                                children: [
-                                  Container(height: MediaQuery.of(context).size.height/6, child: ClipRRect(borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5)), child: Image.network(filteredPostos[index]['foto'], fit: BoxFit.cover))), // Exibe a imagem do posto com cantos arredondados.
-                                  Container(margin: const EdgeInsets.only(left: 20, right: 20), child: Center(child: Text(filteredPostos[index]['nome'], style: TextStyle(color: c.preto, fontSize: 15)))), // Exibe o nome do posto.
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    );
+              onChanged: (value) {
+                setState(() {
+                  _searchQuery = value.toLowerCase(); // Atualiza a consulta de pesquisa.
+                });
+              },
+            ),
+            const SizedBox(height: 10),
+            Expanded(
+              child: FutureBuilder(
+                future: _futureData, // Define o futuro a ser observado.
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) { // Verifica se os dados estão sendo carregados.
+                    return const Center(child: CircularProgressIndicator()); // Mostra um indicador de progresso enquanto os dados são carregados.
                   }
-                ),
+                  if (snapshot.hasError) { // Verifica se houve um erro ao carregar os dados.
+                    return Center(child: Text("${snapshot.error}")); // Mostra a mensagem de erro.
+                  }
+                  List<dynamic> filteredPostos = _postos.where((posto) {
+                    return posto['nome'].toLowerCase().contains(_searchQuery);
+                  }).toList(); // Filtra os postos com base na consulta de pesquisa.
+                  return Center(
+                    child: GridView.builder(
+                      itemCount: filteredPostos.length, // Define o número de itens na grade.
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount:  2, // Define o número de colunas baseado na orientação da tela.
+                        mainAxisSpacing: 15, // Define o espaçamento principal entre os itens.
+                        crossAxisSpacing: 15 // Define o espaçamento cruzado entre os itens.
+                      ), 
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Qr_Scanner(id_posto: filteredPostos[index]['id']))), // Navega para a página de escaneamento QR ao tocar no item.
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5), // Define os cantos arredondados do contêiner.
+                              color: c.azul_2.withOpacity(0.4), // Define a cor de fundo do contêiner.
+                            ),
+                            width: MediaQuery.of(context).size.width * 0.5 - 15,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center, // Alinha os itens ao centro horizontalmente.
+                              children: [
+                                Container(height: MediaQuery.of(context).size.height/6, child: ClipRRect(borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5)), child: Image.network(filteredPostos[index]['foto'], fit: BoxFit.cover))), // Exibe a imagem do posto com cantos arredondados.
+                                Container(margin: const EdgeInsets.only(left: 20, right: 20), child: Center(child: Text(filteredPostos[index]['nome'], style: TextStyle(color: c.preto, fontSize: 15)))), // Exibe o nome do posto.
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                }
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
