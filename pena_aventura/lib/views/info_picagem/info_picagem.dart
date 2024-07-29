@@ -15,19 +15,19 @@ class _InfoPicagemState extends State<InfoPicagem> { // Estado da tela de inform
   TextEditingController dataInicioController = TextEditingController(); // Controlador para a data de início
   TextEditingController dataFimController = TextEditingController(); // Controlador para a data de término
   ValueNotifier<List<bool>> _isExpanded = ValueNotifier<List<bool>>([]); // Lista para controlar a expansão dos painéis
-  String total = "0";
-  var now = DateTime.now();
-  late Future<List<dynamic>> _futureData; // Declara uma variável para armazenar os dados futuros.
-  String info_filtro = "Hoje";
+  String total = "0"; // Variável para armazenar o total
+  var now = DateTime.now(); // Obtém a data e hora atuais
+  late Future<List<dynamic>> _futureData; // Declara uma variável para armazenar os dados futuros
+  String info_filtro = "Hoje"; // Filtro de informações
 
   @override
-  void initState() {
-    super.initState();
-    _refreshView();
+  void initState() { // Método inicial do estado
+    super.initState(); // Chama o método inicial da classe pai
+    _refreshView(); // Atualiza a visualização
   }
 
-  void _refreshView() {
-    _futureData = _getFilteredData();
+  void _refreshView() { // Método para atualizar a visualização
+    _futureData = _getFilteredData(); // Obtém os dados filtrados
   }
 
   Future<int?> _getid() async { // Método assíncrono para obter o ID do usuário
@@ -40,13 +40,13 @@ class _InfoPicagemState extends State<InfoPicagem> { // Estado da tela de inform
 
     var url = Uri.parse('https://adminpena.oxb.pt/index.php/execucaoatividadesapp'); // URL da API
     var response = await http.post(url, body: {
-      'id_utilizador': id.toString(),
-      'data_inicio': dataInicioController.text,
-      'data_fim': dataFimController.text,
+      'id_utilizador': id.toString(), // ID do usuário
+      'data_inicio': dataInicioController.text, // Data de início
+      'data_fim': dataFimController.text, // Data de término
     }); // Envia uma solicitação POST para a API
     if (response.statusCode == 200) { // Verifica se a solicitação foi bem-sucedida
-      total = json.decode(response.body)['total'];
-      return json.decode(response.body)['registos']; // Decodifica a resposta do servidor
+      total = json.decode(response.body)['total']; // Decodifica o total da resposta do servidor
+      return json.decode(response.body)['registos']; // Decodifica os registros da resposta do servidor
     } else {
       throw Exception('Erro ao obter os dados'); // Lança uma exceção em caso de erro na solicitação
     }
@@ -57,7 +57,7 @@ class _InfoPicagemState extends State<InfoPicagem> { // Estado da tela de inform
       context: context, // Contexto do aplicativo
       builder: (BuildContext context) { // Construtor do widget da folha de fundo modal
             return Container( // Widget de contêiner
-            height: MediaQuery.of(context).size.height/2.5,
+            height: MediaQuery.of(context).size.height/2.5, // Altura do contêiner
               padding: EdgeInsets.all(20), // Preenchimento do contêiner
               child: Column( // Coluna de widgets
                 children: [ // Lista de widgets
@@ -65,336 +65,236 @@ class _InfoPicagemState extends State<InfoPicagem> { // Estado da tela de inform
                     title: Text('Hoje'), // Título da lista
                     onTap: () { // Função chamada ao tocar na lista
                       setState(() {}); // Atualiza a visualização
-                      info_filtro = "Hoje";
-                      dataFimController.text = now.toString().split(" ")[0];
-                        print(dataInicioController.text);
-                      dataInicioController.text = now.toString().split(" ")[0];
-                        print(dataFimController.text);
-                      Navigator.pop(context);
-                     _getFilteredData().then((value) => setState(() {}));
+                      info_filtro = "Hoje"; // Define o filtro para "Hoje"
+                      dataFimController.text = now.toString().split(" ")[0]; // Define a data de término para hoje
+                        print(dataInicioController.text); // Imprime a data de início no console
+                      dataInicioController.text = now.toString().split(" ")[0]; // Define a data de início para hoje
+                        print(dataFimController.text); // Imprime a data de término no console
+                      Navigator.pop(context); // Fecha o diálogo
+                     _getFilteredData().then((value) => setState(() {})); // Obtém os dados filtrados e atualiza a visualização
                     },
                   ),
                   ListTile(
-                    title: Text("Últimos 7 dias"),
-                    onTap: () {
+                    title: Text("Últimos 7 dias"), // Título da lista
+                    onTap: () { // Função chamada ao tocar na lista
                       setState(() {
-                        info_filtro = "Últimos 7 dias";
-                        dataFimController.text = now.toString().split(" ")[0];
-                        print(dataInicioController.text);
-                        var ultimo = now.subtract(Duration(days: 7));
-                        dataInicioController.text = ultimo.toString().split(" ")[0];
-                        print(dataFimController.text);
-                        Navigator.pop(context);
-                        _getFilteredData().then((value) => setState(() {}));
+                        info_filtro = "Últimos 7 dias"; // Define o filtro para "Últimos 7 dias"
+                        dataFimController.text = now.toString().split(" ")[0]; // Define a data de término para hoje
+                        print(dataInicioController.text); // Imprime a data de início no console
+                        var ultimo = now.subtract(Duration(days: 7)); // Calcula a data de 7 dias atrás
+                        dataInicioController.text = ultimo.toString().split(" ")[0]; // Define a data de início
+                        print(dataFimController.text); // Imprime a data de término no console
+                        Navigator.pop(context); // Fecha o diálogo
+                        _getFilteredData().then((value) => setState(() {})); // Obtém os dados filtrados e atualiza a visualização
                       });
                     },
                   ),
                   ListTile(
-                    title: Text("Últimos 30 dias"),
-                    onTap: () {
+                    title: Text("Últimos 30 dias"), // Título da lista
+                    onTap: () { // Função chamada ao tocar na lista
                       setState(() {
-                        info_filtro = "Últimos 30 dias";
-                        dataFimController.text = now.toString().split(" ")[0];
-                        print(dataInicioController.text);
-                        var ultimo = now.subtract(Duration(days: 30));
-                        dataInicioController.text = ultimo.toString().split(" ")[0];
-                        print(dataFimController.text);
-                        Navigator.pop(context);
-                        _getFilteredData().then((value) => setState(() {}));
+                        info_filtro = "Últimos 30 dias"; // Define o filtro para "Últimos 30 dias"
+                        dataFimController.text = now.toString().split(" ")[0]; // Define a data de término para hoje
+                        print(dataInicioController.text); // Imprime a data de início no console
+                        var ultimo = now.subtract(Duration(days: 30)); // Calcula a data de 30 dias atrás
+                        dataInicioController.text = ultimo.toString().split(" ")[0]; // Define a data de início
+                        print(dataFimController.text); // Imprime a data de término no console
+                        Navigator.pop(context); // Fecha o diálogo
+                        _getFilteredData().then((value) => setState(() {})); // Obtém os dados filtrados e atualiza a visualização
                       });
                     },
                   ),
                   ListTile(
-                    title: Text("Últimos 60 dias"),
-                    onTap: () {
+                    title: Text("Últimos 60 dias"), // Título da lista
+                    onTap: () { // Função chamada ao tocar na lista
                       setState(() {
-                        info_filtro = "Últimos 60 dias";
-                        dataFimController.text = now.toString().split(" ")[0];
-                        print(dataInicioController.text);
-                        var ultimo = now.subtract(Duration(days: 60));
-                        dataInicioController.text = ultimo.toString().split(" ")[0];
-                        print(dataFimController.text);
-                        Navigator.pop(context);
-                       _getFilteredData().then((value) => setState(() {}));
+                        info_filtro = "Últimos 60 dias"; // Define o filtro para "Últimos 60 dias"
+                        dataFimController.text = now.toString().split(" ")[0]; // Define a data de término para hoje
+                        print(dataInicioController.text); // Imprime a data de início no console
+                        var ultimo = now.subtract(Duration(days: 60)); // Calcula a data de 60 dias atrás
+                        dataInicioController.text = ultimo.toString().split(" ")[0]; // Define a data de início
+                        print(dataFimController.text); // Imprime a data de término no console
+                        Navigator.pop(context); // Fecha o diálogo
+                       _getFilteredData().then((value) => setState(() {})); // Obtém os dados filtrados e atualiza a visualização
                       });
                     },
                   ),
                   ListTile(
-                    title: Text("Personalizado"),
+                    title: Text("Personalizado"), // Título da lista
                     onTap:() {
-                      showModalBottomSheet(
+                      showModalBottomSheet( // Exibe uma folha de fundo modal para o filtro personalizado
                         context: context, 
                         builder: (BuildContext context){
                           return Container(
-                            padding: const EdgeInsets.all(10),
-                            height: MediaQuery.of(context).size.height/3,
+                            padding: const EdgeInsets.all(10), // Preenchimento do contêiner
+                            height: MediaQuery.of(context).size.height/3, // Altura do contêiner
                             child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround, // Alinhamento principal
                               children: [
                                 Container(
-                                  padding: const EdgeInsets.all(5),
+                                  padding: const EdgeInsets.all(5), // Preenchimento do contêiner
                                   decoration: BoxDecoration(
-                                    border: Border.all(color: c.preto),
-                                    borderRadius: BorderRadius.circular(20)
+                                    border: Border.all(color: c.preto), // Borda do contêiner
+                                    borderRadius: BorderRadius.circular(20) // Borda arredondada
                                   ),
-                                  child: TextField( //TextField para inserir a data do inicio da atividade
-                                    readOnly: true,
-                                    controller: dataInicioController,
-                                    cursorColor: c.preto,
-                                    obscureText: false,
-                                    onTap: () => dateInicioPicker(),
+                                  child: TextField( // TextField para inserir a data de início da atividade
+                                    readOnly: true, // Somente leitura
+                                    controller: dataInicioController, // Controlador do TextField
+                                    cursorColor: c.preto, // Cor do cursor
+                                    obscureText: false, // Texto não obscuro
+                                    onTap: () => dateInicioPicker(), // Função chamada ao tocar no TextField
                                     decoration: const InputDecoration(
-                                      labelStyle: TextStyle(color: c.preto),
-                                      icon: Icon(Icons.calendar_month_outlined),
-                                      label: Text("Data Início"),
-                                      border: InputBorder.none,
-                                      filled: false,
+                                      labelStyle: TextStyle(color: c.preto), // Estilo do rótulo
+                                      icon: Icon(Icons.calendar_month_outlined), // Ícone do calendário
+                                      label: Text("Data Início"), // Rótulo do TextField
                                     ),
                                   ),
                                 ),
-                            Container(
-                              padding: const EdgeInsets.all(5),
-                              decoration: BoxDecoration(
-                                border: Border.all(color: c.preto),
-                                borderRadius: BorderRadius.circular(20)
-                              ),
-                              child: TextField( // TextField para inserir a data do fim da atividade
-                                readOnly: true,
-                                controller: dataFimController,
-                                cursorColor: c.preto,
-                                obscureText: false,
-                                onTap: () => dateFimPicker(),
-                                decoration: const InputDecoration(
-                                  labelStyle: TextStyle(color: c.preto),
-                                  icon: Icon(Icons.calendar_month_outlined),
-                                  label: Text("Data Fim"),
-                                  border: InputBorder.none,
-                                  filled: false,
+                                Container(
+                                  padding: const EdgeInsets.all(5), // Preenchimento do contêiner
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: c.preto), // Borda do contêiner
+                                    borderRadius: BorderRadius.circular(20) // Borda arredondada
+                                  ),
+                                  child: TextField( // TextField para inserir a data de término da atividade
+                                    readOnly: true, // Somente leitura
+                                    controller: dataFimController, // Controlador do TextField
+                                    cursorColor: c.preto, // Cor do cursor
+                                    obscureText: false, // Texto não obscuro
+                                    onTap: () => dateFimPicker(), // Função chamada ao tocar no TextField
+                                    decoration: const InputDecoration(
+                                      labelStyle: TextStyle(color: c.preto), // Estilo do rótulo
+                                      icon: Icon(Icons.calendar_month_outlined), // Ícone do calendário
+                                      label: Text("Data Fim"), // Rótulo do TextField
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                            GestureDetector( //botão para filtrar com as datas que insiriu o usuario
-                              onTap: () {         
-                                info_filtro = "${dataInicioController.text} → ${dataFimController.text}";           
-                                _getFilteredData().then((value) => setState(() {}));
-                                Navigator.pop(context);
-                                Navigator.pop(context);
-                              },
-                              child: Container(
-                                height: MediaQuery.of(context).size.height/15,
-                                decoration: BoxDecoration(
-                                  color: c.azul_1,
-                                  borderRadius: BorderRadius.circular(5)
-                                ),
-                                child: Center(child: Text("Filtrar", style: TextStyle(color: c.branco))),
-                              ),
-                            )
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context); // Fecha o diálogo
+                                    _getFilteredData().then((value) => setState(() {})); // Obtém os dados filtrados e atualiza a visualização
+                                  }, 
+                                  child: Container( 
+                                    padding: const EdgeInsets.all(15), // Preenchimento do contêiner
+                                    decoration: BoxDecoration(
+                                      color: c.preto, // Cor do fundo
+                                      borderRadius: BorderRadius.circular(10) // Borda arredondada
+                                    ),
+                                    child: const Text("Filtrar", style: TextStyle(color: Colors.white),), // Texto do botão
+                                  )
+                                )
                               ],
                             ),
                           );
                         }
-                        );
-                    },
+                      );
+                    }
                   )
                 ],
               ),
             );
-          },
+      }
     );
   }
 
   @override
   Widget build(BuildContext context) { // Método para construir a interface do usuário
-    return Scaffold( // Retorna um widget de Scaffold
-      backgroundColor: c.cinza, // Define a cor de fundo do Scaffold
-      body: SafeArea( // Corpo seguro do Scaffold
-        child: FutureBuilder( // Construtor de widget baseado em futuro
-          future: _getFilteredData(), // Futuro para construir o widget
-          builder: (BuildContext context, AsyncSnapshot snapshot) { // Construtor de widget com base no snapshot do futuro
-            if (snapshot.connectionState == ConnectionState.waiting) { // Verifica se a conexão está aguardando
-              return const Center(child: CircularProgressIndicator()); // Retorna um indicador de progresso
-            }
-            if (snapshot.hasError) { // Verifica se há um erro no snapshot
-              return Center(child: Text("${snapshot.error}")); // Retorna o erro
-            }
-            if (snapshot.data.isEmpty) { // Verifica se não há dados no snapshot
-              //return const Center(child: Text("Não há informação")); // Retorna uma mensagem de que não há informações
-            }
-
-            List<dynamic> snap = snapshot.data!; // Obtém os dados do snapshot
-            print(snap.length);
-            if (_isExpanded.value.length != snap.length) { // Verifica o comprimento da lista de expansão
-              _isExpanded.value = List<bool>.filled(snap.length, false); // Preenche a lista de expansão com valores falsos
-            }
-
-            return SingleChildScrollView( // Retorna um widget de rolagem
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Column(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(15),
-                      height: MediaQuery.of(context).size.height/14,
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        color: c.azul_2.withOpacity(0.2)
-                      ),
-                      child: Center(
-                        child: Text(info_filtro, style: TextStyle(fontWeight: FontWeight.bold),),
-                      ),
-                    ),
-                    SizedBox(height: 5,),
-                    Container(
-                      padding: const EdgeInsets.all(15),
-                      height: MediaQuery.of(context).size.height/6.5,
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        color: c.azul_2.withOpacity(0.4),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Total: "),
-                          Text("${total}€", style: TextStyle(fontSize: 40)),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    snap.length<=0?Center(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text('Não há informação sobre picagem', style: TextStyle(fontSize: 20),),
-                          Text('tente com outro filtro 😓', style: TextStyle(fontSize: 20),),
-                        ],
-                      ),
-                    )
-                    :ValueListenableBuilder(
-                      valueListenable: _isExpanded,
-                      builder: (context, List<bool> isExpanded, _) {
-                        return ExpansionPanelList( // Lista de painéis expansíveis
-                          expandedHeaderPadding: const EdgeInsets.all(5), // Preenchimento do cabeçalho expandido
-                          animationDuration: Duration(milliseconds: 200), // Duração da animação
-                          elevation: 1, // Elevação dos painéis
-                          materialGapSize: 5, // Tamanho do espaço entre os painéis
-                          children: List.generate(snap.length, (index) { // Gera uma lista de widgets com base nos dados
-                            return ExpansionPanel( // Painel expansível
-                              backgroundColor: c.cinza, // Cor de fundo do painel
-                              canTapOnHeader: true, // Permite tocar no cabeçalho do painel
-                              isExpanded: isExpanded[index], // Define se o painel está expandido ou não
-                              headerBuilder: (context, isExpanded) => Padding( // Construtor de cabeçalho
-                                padding: const EdgeInsets.all(5.0), // Preenchimento do cabeçalho
-                                child: Column( // Coluna de widgets
-                                  crossAxisAlignment: CrossAxisAlignment.start, // Alinhamento cruzado dos widgets
-                                  children: [
-                                    Row( // Linha de widgets
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween, // Alinhamento principal dos widgets
-                                      children: [
-                                        Expanded(
-                                          child: Text(
-                                            snap[index]['nome_produto'], 
-                                            overflow: TextOverflow.ellipsis,
-                                            softWrap: false,
-                                            maxLines: 2,
-                                            textScaler: TextScaler.linear(0.8),
-                                            ),
-                                        ), // Exibe o nome do item
-                                        Text("${snap[index]['quantidade_picada']} Qtd", style: TextStyle(fontWeight: FontWeight.bold),) // Exibe a quantidade picada
-                                      ],
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(snap[index]['nome_posto']), // Exibe informações estáticas
-                                        Text("${snap[index]['total_parceiro'].toString()}€", style: TextStyle(color: c.azul_1),),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              body: Padding(
-                                padding: const EdgeInsets.only(left: 20.0),
-                                child: Column( // Corpo do painel
-                                  children: [
-                                    Row(
-                                      crossAxisAlignment: CrossAxisAlignment.end,
-                                      children: [
-                                        Text("Monitor:", style: TextStyle(fontWeight: FontWeight.bold),),
-                                        Text("${snap[index]['nome_monitor']}"),
-                                      ],
-                                    ), // Exibe dados dinâmicos
-                                    Row(
-                                      children: [
-                                        Text("Cliente:", style: TextStyle(fontWeight: FontWeight.bold),),
-                                        Text("${snap[index]['cliente']}"),
-                                      ],
-                                    ), // Exibe dados dinâmicos
-                                    Row(
-                                      children: [
-                                        Text("Percentagem: ", style: TextStyle(fontWeight: FontWeight.bold),),
-                                        Text("${snap[index]['percentagem_parceiro']}%"),
-                                      ],
-                                    ), // Exibe dados dinâmicos
-                                    Row(
-                                      children: [
-                                        Text("Monitor:", style: TextStyle(fontWeight: FontWeight.bold),),
-                                        Text("${snap[index]['data_criacao']}"),
-                                      ],
-                                    ), // Exibe dados dinâmicos
-                                  ],
-                                ),
-                              ),
-                            );
-                          }),
-                          expansionCallback: (panelIndex, isExpanded) { // Função de retorno de chamada de expansão
-                            _isExpanded.value[panelIndex] = isExpanded; // Define o estado de expansão do painel
-                            _isExpanded.notifyListeners(); // Notifica os ouvintes sobre a alteração
-                          },
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        ),
+    return Scaffold( // Widget Scaffold para estrutura básica de layout
+      appBar: AppBar( // Barra de aplicativo
+        centerTitle: true, // Centraliza o título
+        title: const Text("Atividades"), // Título da barra de aplicativo
+        backgroundColor: c.preto, // Cor de fundo da barra de aplicativo
       ),
-      floatingActionButton: FloatingActionButton( // Botão flutuante
-        backgroundColor: c.azul_1, // Cor de fundo do botão
-        onPressed: _showFilterDialog, // Função chamada ao pressionar o botão
-        child: Icon(Icons.filter_list, color: c.branco), // Ícone do botão
+      body: SingleChildScrollView( // Widget para rolagem única
+        child: Container(
+          padding: const EdgeInsets.all(15), // Preenchimento do contêiner
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start, // Alinhamento cruzado
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween, // Espaçamento entre os itens
+                children: [
+                  ElevatedButton(
+                    onPressed: _showFilterDialog, // Chama o método para exibir o diálogo de filtro
+                    child: Row(
+                      children: const [
+                        Icon(Icons.calendar_month_outlined), // Ícone do calendário
+                        Text("Filtrar"), // Texto do botão
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 20), // Espaçamento entre os widgets
+                  Text("Total: $total", style: const TextStyle(fontWeight: FontWeight.bold)), // Texto do total
+                ],
+              ),
+              const SizedBox(height: 15), // Espaçamento entre os widgets
+              FutureBuilder<List<dynamic>>(
+                future: _futureData, // Futuro com os dados filtrados
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator()); // Indicador de progresso circular
+                  } else if (snapshot.hasError) {
+                    return Text('Erro: ${snapshot.error}'); // Exibe a mensagem de erro
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return const Text('Nenhum dado encontrado'); // Mensagem caso não haja dados
+                  } else {
+                    return Column( // Coluna com os dados filtrados
+                      children: List.generate(snapshot.data!.length, (index) {
+                        var item = snapshot.data![index];
+                        return Card(
+                          elevation: 5, // Elevação do cartão
+                          child: ExpansionTile(
+                            title: Text(item['atividade']), // Título do cartão
+                            subtitle: Text('Data: ${item['data']}'), // Subtítulo do cartão
+                            children: [
+                              ListTile(
+                                title: Text('Duração: ${item['duracao']}'), // Duração da atividade
+                              ),
+                              ListTile(
+                                title: Text('Local: ${item['local']}'), // Local da atividade
+                              ),
+                            ],
+                          ),
+                        );
+                      }),
+                    );
+                  }
+                },
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
 
-  Future<void> dateInicioPicker() async { // Método assíncrono para selecionar a data de início
-    DateTime? picked = await showDatePicker( // Exibe um seletor de data
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2023),
-      lastDate: DateTime(2025)
+  void dateInicioPicker() async { // Método para exibir o seletor de data de início
+    DateTime? pickedDate = await showDatePicker(
+      context: context, 
+      initialDate: DateTime.now(), // Data inicial
+      firstDate: DateTime(2000), // Primeira data
+      lastDate: DateTime(2101), // Última data
     );
 
-    if (picked != null) { // Verifica se a data foi selecionada
-      dataInicioController.text = picked.toString().split(" ")[0]; // Define a data selecionada no controlador
+    if (pickedDate != null) {
+      setState(() {
+        dataInicioController.text = pickedDate.toString().split(' ')[0]; // Atualiza o controlador com a data selecionada
+      });
     }
   }
 
-  Future<void> dateFimPicker() async { // Método assíncrono para selecionar a data de término
-    DateTime? picked = await showDatePicker( // Exibe um seletor de data
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2023),
-      lastDate: DateTime(2025)
+  void dateFimPicker() async { // Método para exibir o seletor de data de término
+    DateTime? pickedDate = await showDatePicker(
+      context: context, 
+      initialDate: DateTime.now(), // Data inicial
+      firstDate: DateTime(2000), // Primeira data
+      lastDate: DateTime(2101), // Última data
     );
 
-    if (picked != null) { // Verifica se a data foi selecionada
-      dataFimController.text = picked.toString().split(" ")[0]; // Define a data selecionada no controlador
-      print(dataFimController.text);
+    if (pickedDate != null) {
+      setState(() {
+        dataFimController.text = pickedDate.toString().split(' ')[0]; // Atualiza o controlador com a data selecionada
+      });
     }
   }
 }
